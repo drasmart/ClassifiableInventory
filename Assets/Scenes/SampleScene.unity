@@ -554,8 +554,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScript: {fileID: 1434239737}
-  property: 
-  propertyType: 0
+  property: backpack
+  propertyType: 2
   index: 0
 --- !u!1 &216009855
 GameObject:

@@ -13,6 +13,8 @@ public class SlotEditor : Editor
     private SerializedProperty propertyTypeProp;
     private SerializedProperty indexProp;
 
+    private LastDropClick lastDropClick;
+
     void OnEnable()
     {
         targetProp = serializedObject.FindProperty("targetScript");
@@ -25,6 +27,14 @@ public class SlotEditor : Editor
     {
         serializedObject.Update();
 
+        if (lastDropClick != null)
+        {
+            propertyProp.stringValue = lastDropClick.property;
+            propertyTypeProp.enumValueIndex = (int)lastDropClick.propertyType;
+            indexProp.intValue = lastDropClick.index;
+            lastDropClick = null;
+        }
+
         EditorGUILayout.PropertyField(targetProp);
         EditorGUILayout.PropertyField(propertyProp);
         EditorGUILayout.PropertyField(propertyTypeProp);
@@ -35,29 +45,55 @@ public class SlotEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
+    private class LastDropClick
+    {
+        public readonly string property;
+        public readonly Slot.PropertyType propertyType;
+        public readonly int index;
+
+        public LastDropClick(string property, Slot.PropertyType propertyType, int index)
+        {
+            this.property = property;
+            this.propertyType = propertyType;
+            this.index = index;
+        }
+    }
+
     private void FindClassifiableFields()
     {
+        if (!EditorGUILayout.DropdownButton(new GUIContent(propertyProp.stringValue), FocusType.Keyboard))
+        {
+            return;
+        }
+
         var targ = (serializedObject.targetObject as Slot)?.targetScript;
         if (targ == null)
         {
             return;
         }
+
+        GenericMenu menu = new GenericMenu();
+
         var t = targ.GetType();
         var q = typeof(DraggableModel);
         var qName = q.Name;
 
         string msg = t.Name + "\n";
-        foreach(var nextField in t.GetFields())
+        foreach (var nextField in t.GetFields())
         {
             var nextType = nextField.FieldType;
+            var name = nextField.Name;
+            bool active = name == propertyProp.stringValue;
 
             msg += nextField.Name + " (" + nextType.Name + "): can ";
-            if (!q.IsAssignableFrom(nextType))
+            if (q.IsAssignableFrom(nextType))
             {
-                msg += "not ";
+                menu.AddItem(new GUIContent(name), active, () =>
+                {
+                    lastDropClick = new LastDropClick(name, Slot.PropertyType.Plain, 0);
+                });
+                continue;
             }
-            msg += "assign to " + qName;
-            msg += "\n";
 
             if (nextType.IsGenericType)
             {
@@ -65,28 +101,31 @@ public class SlotEditor : Editor
                 if (genericArgs.Length == 1 && nextType == typeof(List<>).MakeGenericType(genericArgs[0]))
                 {
                     var testType = genericArgs[0];
-                    msg += nextField.Name + " (List<" + testType.Name + ">): can ";
-                    if (!q.IsAssignableFrom(testType))
+                    if (q.IsAssignableFrom(testType))
                     {
-                        msg += "not ";
+                        menu.AddItem(new GUIContent(name), active, () =>
+                        {
+                            lastDropClick = new LastDropClick(name, Slot.PropertyType.List, 0);
+                        });
+                        continue;
                     }
-                    msg += "assign elements to " + qName;
-                    msg += "\n";
                 }
             }
 
             if (nextType.IsArray)
             {
                 var testType = nextType.GetElementType();
-                msg += nextField.Name + " (" + testType.Name + "[]): can ";
-                if (!q.IsAssignableFrom(testType))
+                if (q.IsAssignableFrom(testType))
                 {
-                    msg += "not ";
+                    menu.AddItem(new GUIContent(name), active, () =>
+                    {
+                        lastDropClick = new LastDropClick(name, Slot.PropertyType.Array, 0);
+                    });
+                    continue;
                 }
-                msg += "assign elements to " + qName;
-                msg += "\n";
             }
         }
-        Debug.Log(msg);
+
+        menu.ShowAsContext();
     }
 }
