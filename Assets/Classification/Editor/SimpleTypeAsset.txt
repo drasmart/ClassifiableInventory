@@ -1,0 +1,9 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Classification;
+
+[CreateAssetMenu(fileName = "SimpleTypeAsset.asset", menuName = "Classification/Simple Type")]
+public class SimpleTypeAsset : TypeAsset<SimpleTypeAsset>
+{
+}
