@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(Item))]
-public class ItemEditor : Editor
+[CustomEditor(typeof(ItemType))]
+[CanEditMultipleObjects]
+public class ItemTypeEditor : Editor
 {
     private Sprite lastSprite = null;
     private Texture2D lastPreview = null;
 
     public override Texture2D RenderStaticPreview(string assetPath, Object[] subAssets, int width, int height)
     {
-        var item = target as Item;
+        var item = target as ItemType;
         Texture2D result = null;
         if (item != null && item.sprite != null)
         {

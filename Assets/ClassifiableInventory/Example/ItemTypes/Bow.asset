@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18be8a5eb96c44f469625c3883bbf2dc, type: 3}
-  m_Name: Leather_Robe
+  m_Name: Bow
   m_EditorClassIdentifier: 
-  slotType: {fileID: 11400000, guid: 4bde84b109fd1dd42a1ebd332f8ee680, type: 2}
-  sprite: {fileID: -8869905478719167701, guid: e61d75d8816981d4494a900937152bb4, type: 3}
+  slotType: {fileID: 11400000, guid: d36369a853d6f834592867341e210935, type: 2}
+  sprite: {fileID: 21300000, guid: 9ef2a1a3d24c80d4aa8ad95fca526fca, type: 3}
+  durability: 48

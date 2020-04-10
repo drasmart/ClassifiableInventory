@@ -1,11 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using Classification;
 
-[CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]
-public class Item : ScriptableObject
+[System.Serializable]
+public class Item : DraggableModel
 {
-    public ItemSlotTypeAsset slotType;
-    public Sprite sprite;
+    public ItemType itemType;
+    public int durability;
+
+    public Classifiable.TypeAsset[] classes {
+        get {
+            var slotType = itemType?.slotType;
+            if (slotType != null)
+            {
+                return new Classifiable.TypeAsset[1] { slotType };
+            }
+            return new Classifiable.TypeAsset[0];
+        }
+    }
 }
