@@ -104,9 +104,18 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             )
         {
             Attach(draggable, slot, true);
-            if (oldDraggable && oldSlot)
+            slot.draggableModel = draggable.draggableModel;
+            if (oldSlot)
             {
-                Attach(oldDraggable, oldSlot, true);
+                if (oldDraggable)
+                {
+                    Attach(oldDraggable, oldSlot, true);
+                    oldSlot.draggableModel = oldDraggable.draggableModel;
+                }
+                else
+                {
+                    oldSlot.draggableModel = null;
+                }
             }
             return true;
         }
