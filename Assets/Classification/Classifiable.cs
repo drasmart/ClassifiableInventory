@@ -66,5 +66,16 @@ namespace Classification
             }
             return null;
         }
+
+        public void AddAllFrom(Classifiable other)
+        {
+            foreach(var nextClass in other.classes)
+            {
+                if (!classes.Contains(nextClass))
+                {
+                    classes.Add(nextClass);
+                }
+            }
+        }
     }
 }

@@ -6,42 +6,33 @@ using Classification;
 using System;
 
 [CustomEditor(typeof(Slot))]
-public class SlotEditor : Editor
+[CanEditMultipleObjects]
+public class SlotEditor : BaseSlotEditor
 {
-    private SerializedProperty targetProp;
-    private SerializedProperty propertyProp;
-    private SerializedProperty propertyTypeProp;
     private SerializedProperty indexProp;
 
     private SerializedProperty draggableUIProp;
 
-    private LastDropClick lastDropClick;
+    private int? newPropLength;
 
-    void OnEnable()
+    protected override void OnEnable()
     {
-        targetProp = serializedObject.FindProperty("targetScript");
-        propertyProp = serializedObject.FindProperty("property");
-        propertyTypeProp = serializedObject.FindProperty("propertyType");
+        base.OnEnable();
         indexProp = serializedObject.FindProperty("index");
 
         draggableUIProp = serializedObject.FindProperty("draggableUI");
     }
 
-    public override void OnInspectorGUI()
+    protected override void OnSlotInspection()
     {
-        serializedObject.Update();
-
-        if (lastDropClick != null)
+        if (newPropLength != null)
         {
-            propertyProp.stringValue = lastDropClick.property;
-            propertyTypeProp.enumValueIndex = (int)lastDropClick.propertyType;
-            indexProp.intValue = lastDropClick.index;
-            lastDropClick = null;
+            indexProp.intValue = newPropLength.Value;
+            newPropLength = null;
         }
 
-        EditorGUILayout.PropertyField(targetProp);
+        base.OnSlotInspection();
 
-        FindClassifiableFields();
         ShowIndexPicker();
 
         EditorGUILayout.PropertyField(draggableUIProp);
@@ -49,99 +40,25 @@ public class SlotEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
-    private class LastDropClick
+    protected override PropertyPickHandler PickListField(string name, IList list) => () =>
     {
-        public readonly string property;
-        public readonly Slot.PropertyType propertyType;
-        public readonly int index;
+        base.PickListField(name, list);
+        newPropLength = list.Count;
+    };
 
-        public LastDropClick(string property, Slot.PropertyType propertyType, int index)
-        {
-            this.property = property;
-            this.propertyType = propertyType;
-            this.index = index;
-        }
-    }
-
-    private void FindClassifiableFields()
+    protected override PropertyPickHandler PickArrayField(string name, Array array) => () =>
     {
-        using (var h = new EditorGUILayout.HorizontalScope())
-        {
-            EditorGUILayout.PrefixLabel(new GUIContent("Reflected Field"));
-            if (!EditorGUILayout.DropdownButton(new GUIContent(propertyProp.stringValue), FocusType.Keyboard))
-            {
-                return;
-            }
-        }
-
-        var targ = (serializedObject.targetObject as Slot)?.targetScript;
-        if (targ == null)
-        {
-            return;
-        }
-
-        GenericMenu menu = new GenericMenu();
-
-        var t = targ.GetType();
-        var q = typeof(DraggableModel);
-        var qName = q.Name;
-
-        foreach (var nextField in t.GetFields())
-        {
-            var nextType = nextField.FieldType;
-            var name = nextField.Name;
-            bool active = name == propertyProp.stringValue;
-
-            if (q.IsAssignableFrom(nextType))
-            {
-                menu.AddItem(new GUIContent(name), active, () =>
-                {
-                    lastDropClick = new LastDropClick(name, Slot.PropertyType.Plain, 0);
-                });
-                continue;
-            }
-
-            if (nextType.IsGenericType)
-            {
-                var genericArgs = nextType.GetGenericArguments();
-                if (genericArgs.Length == 1 && nextType == typeof(List<>).MakeGenericType(genericArgs[0]))
-                {
-                    var testType = genericArgs[0];
-                    if (q.IsAssignableFrom(testType))
-                    {
-                        menu.AddItem(new GUIContent(name), active, () =>
-                        {
-                            lastDropClick = new LastDropClick(name, Slot.PropertyType.List, 0);
-                        });
-                        continue;
-                    }
-                }
-            }
-
-            if (nextType.IsArray)
-            {
-                var testType = nextType.GetElementType();
-                if (q.IsAssignableFrom(testType))
-                {
-                    menu.AddItem(new GUIContent(name), active, () =>
-                    {
-                        lastDropClick = new LastDropClick(name, Slot.PropertyType.Array, 0);
-                    });
-                    continue;
-                }
-            }
-        }
-
-        menu.ShowAsContext();
-    }
+        base.PickArrayField(name, array);
+        newPropLength = array.Length;
+    };
 
     private void ShowIndexPicker()
     {
         var targ = (serializedObject.targetObject as Slot)?.targetScript;
         var propName = propertyProp.stringValue;
-        var propType = (Slot.PropertyType)propertyTypeProp.intValue;
+        var propType = (SlotPropertyType)propertyTypeProp.intValue;
         int len = -1;
-        Slot.GetAccess(targ, propName, propType, null, (list) => len = list.Count, (array) => len = array.Length, null);
+        BaseSlot.GetAccess(targ, propName, propType, null, (list) => len = list.Count, (array) => len = array.Length, null);
         if (len == -1)
         {
             return;
