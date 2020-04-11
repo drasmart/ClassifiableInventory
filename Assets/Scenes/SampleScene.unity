@@ -1590,24 +1590,24 @@ MonoBehaviour:
   backpack:
   - itemType: {fileID: 0}
     durability: 0
-  - itemType: {fileID: 0}
-    durability: 0
-  - itemType: {fileID: 0}
-    durability: 0
+  - itemType: {fileID: 11400000, guid: 787c56d04f704924abbbf3e867d94864, type: 2}
+    durability: 1
+  - itemType: {fileID: 11400000, guid: a3be51ef9894ed94fbdd5de480e9ab54, type: 2}
+    durability: 1
   - itemType: {fileID: 0}
     durability: 0
   weapon:
-    itemType: {fileID: 0}
-    durability: 0
+    itemType: {fileID: 11400000, guid: e00ae5fd47dc5f84d81911c073793f8e, type: 2}
+    durability: 1
   body:
     itemType: {fileID: 0}
     durability: 0
   helmet:
-    itemType: {fileID: 0}
-    durability: 0
+    itemType: {fileID: 11400000, guid: 11e5a1c85193ae741ae7d6a6d0f0c1ee, type: 2}
+    durability: 1
   potions:
-  - itemType: {fileID: 0}
-    durability: 0
+  - itemType: {fileID: 11400000, guid: 265642bd0143ae844bf5cb5c00ae0b43, type: 2}
+    durability: 1
   - itemType: {fileID: 0}
     durability: 0
 --- !u!1001 &1669598894
