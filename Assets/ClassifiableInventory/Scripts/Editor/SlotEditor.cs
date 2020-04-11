@@ -13,6 +13,8 @@ public class SlotEditor : Editor
     private SerializedProperty propertyTypeProp;
     private SerializedProperty indexProp;
 
+    private SerializedProperty draggableUIProp;
+
     private LastDropClick lastDropClick;
 
     void OnEnable()
@@ -21,6 +23,8 @@ public class SlotEditor : Editor
         propertyProp = serializedObject.FindProperty("property");
         propertyTypeProp = serializedObject.FindProperty("propertyType");
         indexProp = serializedObject.FindProperty("index");
+
+        draggableUIProp = serializedObject.FindProperty("draggableUI");
     }
 
     public override void OnInspectorGUI()
@@ -39,6 +43,8 @@ public class SlotEditor : Editor
 
         FindClassifiableFields();
         ShowIndexPicker();
+
+        EditorGUILayout.PropertyField(draggableUIProp);
 
         serializedObject.ApplyModifiedProperties();
     }

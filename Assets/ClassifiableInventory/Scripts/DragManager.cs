@@ -5,13 +5,14 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(AspectRatioFitter))]
-public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public static DragManager instance { get; private set; }
 
     public DraggableUI draggedItem;
     public RectTransform draggedTransform;
     public Vector3 dragOffset;
+
     public RectTransform lastEventImage;
 
     private Canvas canvas;
@@ -44,9 +45,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             draggedTransform = draggedItem.transform as RectTransform;
             var dragPoint = GetDragPoint(eventData);
             dragOffset = draggedTransform.position - dragPoint;
-            draggedTransform.SetParent(transform, true);
-            draggedTransform.SetAsLastSibling();
-            lastEventImage?.SetAsLastSibling();
+            Detach(draggedItem, false);
         }
     }
 
@@ -69,22 +68,61 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         var slot = GetFirstHit<Slot>(eventData, dragOffset);
         if (slot)
         {
-            var slotTransform = slot.transform as RectTransform;
-            draggedTransform.SetParent(slotTransform, true);
-            draggedTransform.localScale = Vector3.one;
-            var s = slotTransform.rect.size;
-            var a = slotTransform.pivot;
-            var da = Vector2.one / 2 - a;
-            var p = new Vector2(s.x * da.x, s.y * da.y);
-            draggedTransform.localPosition = p;
+
+            DoDrop(draggedItem, slot);
         }
         draggedItem = null;
         draggedTransform = null;
     }
 
-    public void OnDrop(PointerEventData eventData)
+    private void DoDrop(DraggableUI draggable, Slot slot)
     {
-        Report("OnDrop", eventData);
+        var oldDraggable = slot.draggableUI;
+        var oldSlot = draggable.slot;
+        Attach(draggable, slot);
+        if (oldDraggable && oldSlot)
+        {
+            Attach(oldDraggable, oldSlot);
+        }
+    }
+
+    private void Attach(DraggableUI draggable, Slot slot)
+    {
+        var dragTransform = draggable.transform as RectTransform;
+        var slotTransform = slot.transform as RectTransform;
+        dragTransform.SetParent(slotTransform, true);
+        dragTransform.localScale = Vector3.one;
+        var s = slotTransform.rect.size;
+        var a = slotTransform.pivot;
+        var da = Vector2.one / 2 - a;
+        var p = new Vector2(s.x * da.x, s.y * da.y);
+        dragTransform.localPosition = p;
+        if (draggable.slot)
+        {
+            draggable.slot.draggableUI = null;
+        }
+        draggable.slot = slot;
+        if (slot.draggableUI)
+        {
+            Detach(slot.draggableUI, true);
+        }
+        slot.draggableUI = draggable;
+    }
+
+    private void Detach(DraggableUI draggable, bool unlink)
+    {
+        if (draggable == null)
+        {
+            return;
+        }
+        if (unlink && draggable.slot != null)
+        {
+            draggable.slot.draggableUI = null;
+            draggable.slot = null;
+        }
+        draggable.transform.SetParent(transform, true);
+        draggable.transform.SetAsLastSibling();
+        lastEventImage?.SetAsLastSibling();
     }
 
     private T GetFirstHit<T>(PointerEventData eventData, Vector3? localOffset = null) where T: MonoBehaviour

@@ -10,6 +10,8 @@ public class Slot : MonoBehaviour
     public PropertyType propertyType;
     public int index;
 
+    public DraggableUI draggableUI;
+
     [System.Serializable]
     public enum PropertyType
     {
