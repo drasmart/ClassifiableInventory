@@ -3,20 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Classification;
 
 [RequireComponent(typeof(AspectRatioFitter))]
 public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public static DragManager instance { get; private set; }
+    public static DragManager Instance {
+        get {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<DragManager>();
+            }
+            return instance;
+        }
+    }
+    private static DragManager instance;
 
     private DraggableUI draggedItem;
-    private RectTransform draggedTransform;
+    private RectTransform draggedTransform { get { return draggedItem?.transform as RectTransform; } }
     private Vector3 dragOffset;
+
+    public GameObject[] dragItemPrefabs;
 
     public RectTransform lastEventImage;
 
     private Canvas canvas;
 
+    private List<RaycastResult> raycastResults = new List<RaycastResult>();
+
+    #region Unity Signals
     private void Awake()
     {
         canvas = GetComponentInParent<Canvas>();
@@ -33,16 +48,15 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             enabled = false;
         }
     }
+    #endregion
 
-    private List<RaycastResult> raycastResults = new List<RaycastResult>();
-
+    #region Drag Events
     public void OnBeginDrag(PointerEventData eventData)
     {
         Report("OnBeginDrag", eventData);
         draggedItem = GetFirstHit<DraggableUI>(eventData);
         if (draggedItem != null)
         {
-            draggedTransform = draggedItem.transform as RectTransform;
             var dragPoint = GetDragPoint(eventData);
             dragOffset = draggedTransform.position - dragPoint;
             Detach(draggedItem, false);
@@ -74,8 +88,8 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             Attach(draggedItem, draggedItem.slot, false);
         }
         draggedItem = null;
-        draggedTransform = null;
     }
+    #endregion
 
     private void DoDrop(DraggableUI draggable, Slot slot)
     {
@@ -88,6 +102,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
     }
 
+    #region Game Object linking
     private void Attach(DraggableUI draggable, Slot slot, bool link)
     {
         var dragTransform = draggable.transform as RectTransform;
@@ -114,7 +129,6 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
         slot.draggableUI = draggable;
     }
-
     private void Detach(DraggableUI draggable, bool unlink)
     {
         if (draggable == null)
@@ -130,6 +144,99 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         draggable.transform.SetAsLastSibling();
         lastEventImage?.SetAsLastSibling();
     }
+    #endregion
+
+    public void UpdateSlot(Slot slot, bool activationFront)
+    {
+        if (!enabled)
+        {
+            return;
+        }
+        if (activationFront == false)
+        {
+            if (slot.draggableUI == draggedItem)
+            {
+                draggedItem = null;
+            }
+            return;
+        }
+        var draggableUI = slot.draggableUI;
+        var model = slot.draggableModel;
+        if (model == null)
+        {
+            if (draggableUI != null)
+            {
+                if (draggableUI == draggedItem)
+                {
+                    draggedItem = null;
+                }
+                Detach(draggableUI, true);
+                Despawn(draggableUI);
+            }
+            return;
+        }
+        if (draggableUI == null)
+        {
+            if (model == null)
+            {
+                return;
+            }
+            draggableUI = SpawnDraggableUI(slot);
+        }
+        if (draggableUI)
+        {
+            draggableUI.draggableModel = model;
+        }
+    }
+    private DraggableUI SpawnDraggableUI(Slot slot)
+    {
+        var classes = slot.draggableModel.classes;
+        foreach(var nextPrefab in dragItemPrefabs)
+        {
+            var draggable = nextPrefab.GetComponent<DraggableUI>();
+            if (draggable && PrefabAcceptsClasses(nextPrefab, classes))
+            {
+                var clone = SpawnPrefab(draggable);
+                Attach(clone, slot, true);
+                return clone;
+            }
+        }
+        return null;
+    }
+    private static bool PrefabAcceptsClasses(GameObject prefab, Classifiable.TypeAsset[] classes)
+    {
+        var classifiable = prefab.GetComponent<Classifiable>();
+        foreach (var nextFilter in classifiable.AllClasses)
+        {
+            bool rejected = true;
+            foreach (var nextClass in classes)
+            {
+                if (nextFilter.Filter(nextClass))
+                {
+                    rejected = false;
+                    break;
+                }
+            }
+            if (rejected)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private DraggableUI SpawnPrefab(DraggableUI prefab)
+    {
+        // TODO: Move to pool
+        return Instantiate(prefab);
+    }
+
+    private void Despawn(DraggableUI draggableUI)
+    {
+        // TODO: Move to pool
+        Destroy(draggableUI.gameObject);
+    }
+
 
     private T GetFirstHit<T>(PointerEventData eventData, Vector3? localOffset = null) where T: MonoBehaviour
     {
@@ -166,6 +273,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
     }
 
+    #region Coordinates Conversion
     private Vector3 GetDragPoint(PointerEventData eventData)
     {
         return transform.InverseTransformPoint(canvas.transform.TransformPoint(eventData.position));
@@ -174,4 +282,5 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         return canvas.transform.InverseTransformVector(transform.TransformVector(localOffset));
     }
+    #endregion
 }

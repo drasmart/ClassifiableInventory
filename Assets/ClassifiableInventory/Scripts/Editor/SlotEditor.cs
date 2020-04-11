@@ -86,14 +86,12 @@ public class SlotEditor : Editor
         var q = typeof(DraggableModel);
         var qName = q.Name;
 
-        string msg = t.Name + "\n";
         foreach (var nextField in t.GetFields())
         {
             var nextType = nextField.FieldType;
             var name = nextField.Name;
             bool active = name == propertyProp.stringValue;
 
-            msg += nextField.Name + " (" + nextType.Name + "): can ";
             if (q.IsAssignableFrom(nextType))
             {
                 menu.AddItem(new GUIContent(name), active, () =>
@@ -140,47 +138,13 @@ public class SlotEditor : Editor
     private void ShowIndexPicker()
     {
         var targ = (serializedObject.targetObject as Slot)?.targetScript;
-        if (targ == null)
-        {
-            return;
-        }
         var propName = propertyProp.stringValue;
-        if (string.IsNullOrEmpty(propName))
+        var propType = (Slot.PropertyType)propertyTypeProp.intValue;
+        int len = -1;
+        Slot.GetAccess(targ, propName, propType, null, (list) => len = list.Count, (array) => len = array.Length, null);
+        if (len == -1)
         {
             return;
-        }
-        var t = targ.GetType();
-        var field = t.GetField(propName);
-        if (field == null)
-        {
-            return;
-        }
-        var fieldType = field.FieldType;
-        var propType = (Slot.PropertyType)propertyTypeProp.enumValueIndex;
-        var q = typeof(DraggableModel);
-        int len = 0;
-        switch (propType)
-        {
-            case Slot.PropertyType.Plain:
-                return;
-            case Slot.PropertyType.Array:
-                if(fieldType.IsArray && q.IsAssignableFrom(fieldType.GetElementType()))
-                {
-                    len = (field.GetValue(targ) as Array).Length;
-                    break;
-                }
-                return;
-            case Slot.PropertyType.List:
-                if (fieldType.IsGenericType)
-                {
-                    var genericArgs = fieldType.GenericTypeArguments;
-                    if (genericArgs.Length == 1 && q.IsAssignableFrom(genericArgs[0]))
-                    {
-                        len = (field.GetValue(targ) as ICollection).Count;
-                        break;
-                    }
-                }
-                return;
         }
         const string prefixLabel = "Element Index";
         if (len == 0)
