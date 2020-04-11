@@ -36,11 +36,9 @@ public class SlotEditor : Editor
         }
 
         EditorGUILayout.PropertyField(targetProp);
-        EditorGUILayout.PropertyField(propertyProp);
-        EditorGUILayout.PropertyField(propertyTypeProp);
-        EditorGUILayout.PropertyField(indexProp);
 
         FindClassifiableFields();
+        ShowIndexPicker();
 
         serializedObject.ApplyModifiedProperties();
     }
@@ -61,9 +59,13 @@ public class SlotEditor : Editor
 
     private void FindClassifiableFields()
     {
-        if (!EditorGUILayout.DropdownButton(new GUIContent(propertyProp.stringValue), FocusType.Keyboard))
+        using (var h = new EditorGUILayout.HorizontalScope())
         {
-            return;
+            EditorGUILayout.PrefixLabel(new GUIContent("Reflected Field"));
+            if (!EditorGUILayout.DropdownButton(new GUIContent(propertyProp.stringValue), FocusType.Keyboard))
+            {
+                return;
+            }
         }
 
         var targ = (serializedObject.targetObject as Slot)?.targetScript;
@@ -127,5 +129,60 @@ public class SlotEditor : Editor
         }
 
         menu.ShowAsContext();
+    }
+
+    private void ShowIndexPicker()
+    {
+        var targ = (serializedObject.targetObject as Slot)?.targetScript;
+        if (targ == null)
+        {
+            return;
+        }
+        var propName = propertyProp.stringValue;
+        if (string.IsNullOrEmpty(propName))
+        {
+            return;
+        }
+        var t = targ.GetType();
+        var field = t.GetField(propName);
+        if (field == null)
+        {
+            return;
+        }
+        var fieldType = field.FieldType;
+        var propType = (Slot.PropertyType)propertyTypeProp.enumValueIndex;
+        var q = typeof(DraggableModel);
+        int len = 0;
+        switch (propType)
+        {
+            case Slot.PropertyType.Plain:
+                return;
+            case Slot.PropertyType.Array:
+                if(fieldType.IsArray && q.IsAssignableFrom(fieldType.GetElementType()))
+                {
+                    len = (field.GetValue(targ) as Array).Length;
+                    break;
+                }
+                return;
+            case Slot.PropertyType.List:
+                if (fieldType.IsGenericType)
+                {
+                    var genericArgs = fieldType.GenericTypeArguments;
+                    if (genericArgs.Length == 1 && q.IsAssignableFrom(genericArgs[0]))
+                    {
+                        len = (field.GetValue(targ) as ICollection).Count;
+                        break;
+                    }
+                }
+                return;
+        }
+        const string prefixLabel = "Element Index";
+        if (len == 0)
+        {
+            EditorGUILayout.LabelField(prefixLabel, "Collection size is 0", EditorStyles.textField);
+            return;
+        }
+        var index = Mathf.Clamp(indexProp.intValue, 0, len - 1);
+        indexProp.intValue = EditorGUILayout.IntSlider(prefixLabel + " (0-" + (len-1).ToString() + ")", index, 0, len - 1);
     }
 }

@@ -556,7 +556,7 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: backpack
   propertyType: 2
-  index: 0
+  index: 2
 --- !u!1 &216009855
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScript: {fileID: 1434239737}
-  property: 
+  property: weapon
   propertyType: 0
   index: 0
 --- !u!1 &309070081
@@ -1070,7 +1070,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScript: {fileID: 1434239737}
-  property: 
+  property: body
   propertyType: 0
   index: 0
 --- !u!1 &672950663
@@ -1339,9 +1339,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScript: {fileID: 1434239737}
-  property: 
-  propertyType: 0
-  index: 0
+  property: backpack
+  propertyType: 2
+  index: 3
 --- !u!1 &736482514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1520,7 +1520,7 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: backpack
   propertyType: 2
-  index: 4
+  index: 0
 --- !u!1 &830547390
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,8 +1624,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScript: {fileID: 1434239737}
-  property: 
-  propertyType: 0
+  property: potions
+  propertyType: 1
   index: 0
 --- !u!1 &902920036
 GameObject:
@@ -1876,7 +1876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScript: {fileID: 1434239737}
-  property: 
+  property: helmet
   propertyType: 0
   index: 0
 --- !u!1 &967881648
@@ -1982,9 +1982,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScript: {fileID: 1434239737}
-  property: 
-  propertyType: 0
-  index: 0
+  property: potions
+  propertyType: 1
+  index: 1
 --- !u!1 &1079458201
 GameObject:
   m_ObjectHideFlags: 0
@@ -2768,9 +2768,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScript: {fileID: 1434239737}
-  property: 
-  propertyType: 0
-  index: 0
+  property: backpack
+  propertyType: 2
+  index: 1
 --- !u!1 &1913253732
 GameObject:
   m_ObjectHideFlags: 0
