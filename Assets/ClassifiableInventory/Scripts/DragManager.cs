@@ -146,7 +146,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
     #endregion
 
-    public void UpdateSlot(Slot slot, bool activationFront)
+    public void UpdateSlot(Slot slot, bool? activationFront)
     {
         if (!enabled)
         {
@@ -186,6 +186,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (draggableUI)
         {
             draggableUI.draggableModel = model;
+            draggableUI.onModelUpdate?.Invoke();
         }
     }
     private DraggableUI SpawnDraggableUI(Slot slot)

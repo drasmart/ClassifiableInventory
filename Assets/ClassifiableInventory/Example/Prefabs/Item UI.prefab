@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1102147593237040163}
   - component: {fileID: 740969371145214886}
   - component: {fileID: 3876615094749531941}
+  - component: {fileID: 4148574367120327013}
   m_Layer: 5
   m_Name: Item UI
   m_TagString: Untagged
@@ -89,6 +90,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: {fileID: 0}
+  onModelUpdate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4148574367120327013}
+        m_MethodName: UpdateUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3876615094749531941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,6 +118,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classes:
   - {fileID: 11400000, guid: c26d92a709e66b344bd3a2a30e68a5a9, type: 2}
+--- !u!114 &4148574367120327013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102147593237040161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8f2f983e33f03439a9be0b724ec18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 1102147593542072812}
+  item:
+    itemType: {fileID: 0}
+    durability: 0
 --- !u!1 &1102147593542072594
 GameObject:
   m_ObjectHideFlags: 0

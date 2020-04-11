@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using Classification;
 
 [RequireComponent(typeof(RectTransform))]
@@ -10,4 +11,6 @@ public class DraggableUI : MonoBehaviour
 {
     public Slot slot;
     public DraggableModel draggableModel;
+
+    public UnityEvent onModelUpdate;
 }
