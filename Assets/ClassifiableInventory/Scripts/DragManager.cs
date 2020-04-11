@@ -80,10 +80,12 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             return;
         }
         var slot = GetFirstHit<Slot>(eventData, dragOffset);
+        bool dropped = false;
         if (slot)
         {
-            DoDrop(draggedItem, slot);
-        } else
+            dropped = TryDrop(draggedItem, slot);
+        }
+        if (!dropped)
         {
             Attach(draggedItem, draggedItem.slot, false);
         }
@@ -91,15 +93,24 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
     #endregion
 
-    private void DoDrop(DraggableUI draggable, Slot slot)
+    private bool TryDrop(DraggableUI draggable, Slot slot)
     {
         var oldDraggable = slot.draggableUI;
         var oldSlot = draggable.slot;
-        Attach(draggable, slot, true);
-        if (oldDraggable && oldSlot)
+        bool isSwap = oldDraggable;
+        if (draggable.draggableModel != null 
+            && PrefabAcceptsClasses(slot.gameObject, draggable.draggableModel.classes) 
+            && (!isSwap || (oldSlot && oldDraggable.draggableModel != null && PrefabAcceptsClasses(oldSlot.gameObject, oldDraggable.draggableModel.classes)))
+            )
         {
-            Attach(oldDraggable, oldSlot, true);
+            Attach(draggable, slot, true);
+            if (oldDraggable && oldSlot)
+            {
+                Attach(oldDraggable, oldSlot, true);
+            }
+            return true;
         }
+        return false;
     }
 
     #region Game Object linking
