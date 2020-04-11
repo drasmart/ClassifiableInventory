@@ -822,7 +822,7 @@ GameObject:
   - component: {fileID: 683303739}
   - component: {fileID: 683303742}
   m_Layer: 5
-  m_Name: AspectFit Panel
+  m_Name: AspectFit Panel + DragManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -912,9 +912,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d20c982e6b3f4084dbccac92f7e689ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  draggedItem: {fileID: 0}
-  draggedTransform: {fileID: 0}
-  dragOffset: {x: 0, y: 0, z: 0}
   lastEventImage: {fileID: 84377652}
 --- !u!1 &721083020
 GameObject:

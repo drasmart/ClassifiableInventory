@@ -9,9 +9,9 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 {
     public static DragManager instance { get; private set; }
 
-    public DraggableUI draggedItem;
-    public RectTransform draggedTransform;
-    public Vector3 dragOffset;
+    private DraggableUI draggedItem;
+    private RectTransform draggedTransform;
+    private Vector3 dragOffset;
 
     public RectTransform lastEventImage;
 
@@ -68,8 +68,10 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         var slot = GetFirstHit<Slot>(eventData, dragOffset);
         if (slot)
         {
-
             DoDrop(draggedItem, slot);
+        } else
+        {
+            Attach(draggedItem, draggedItem.slot, false);
         }
         draggedItem = null;
         draggedTransform = null;
@@ -79,14 +81,14 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         var oldDraggable = slot.draggableUI;
         var oldSlot = draggable.slot;
-        Attach(draggable, slot);
+        Attach(draggable, slot, true);
         if (oldDraggable && oldSlot)
         {
-            Attach(oldDraggable, oldSlot);
+            Attach(oldDraggable, oldSlot, true);
         }
     }
 
-    private void Attach(DraggableUI draggable, Slot slot)
+    private void Attach(DraggableUI draggable, Slot slot, bool link)
     {
         var dragTransform = draggable.transform as RectTransform;
         var slotTransform = slot.transform as RectTransform;
@@ -97,6 +99,10 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         var da = Vector2.one / 2 - a;
         var p = new Vector2(s.x * da.x, s.y * da.y);
         dragTransform.localPosition = p;
+        if (!link)
+        {
+            return;
+        }
         if (draggable.slot)
         {
             draggable.slot.draggableUI = null;
