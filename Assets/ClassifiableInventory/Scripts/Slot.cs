@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(RectTransform))]
 public class Slot : MonoBehaviour
 {
     public MonoBehaviour targetScript;
