@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "NewItemType", menuName = "Inventory/Item Type")]
 public class ItemType : ScriptableObject
 {
-    public ItemSlotTypeAsset slotType;
+    public ItemSlotTypeAsset[] slotTypes;
     public Sprite sprite;
     public int durability;
 }

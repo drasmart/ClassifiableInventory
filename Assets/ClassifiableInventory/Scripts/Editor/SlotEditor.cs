@@ -33,11 +33,14 @@ public class SlotEditor : BaseSlotEditor
 
         base.OnSlotInspection();
 
-        ShowIndexPicker();
-
         EditorGUILayout.PropertyField(draggableUIProp);
+    }
 
-        serializedObject.ApplyModifiedProperties();
+    protected override void DrawReflectedProperty()
+    {
+        base.DrawReflectedProperty();
+
+        ShowIndexPicker();
     }
 
     protected override PropertyPickHandler PickListField(string name, IList list) => () =>
@@ -58,7 +61,7 @@ public class SlotEditor : BaseSlotEditor
         var propName = propertyProp.stringValue;
         var propType = (SlotPropertyType)propertyTypeProp.intValue;
         int len = -1;
-        BaseSlot.GetAccess(targ, propName, propType, null, (list) => len = list.Count, (array) => len = array.Length, null);
+        BaseSlot.GetAccess(targ, propName, propType, null, (list, dataType) => len = list.Count, (array, dataType) => len = array.Length, null);
         if (len == -1)
         {
             return;

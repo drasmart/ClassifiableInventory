@@ -6,4 +6,5 @@ using Classification;
 public interface DraggableModel
 {
     Classifiable.TypeAsset[] classes { get; }
+    bool IsNull { get; }
 }

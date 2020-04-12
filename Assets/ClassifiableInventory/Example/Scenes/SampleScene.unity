@@ -265,6 +265,7 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: backpack
   propertyType: 2
+  fallbackSlotContainer: {fileID: 0}
   slotPrefab: {fileID: 7930127205022493825, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
     type: 3}
 --- !u!1001 &69040978
@@ -405,6 +406,11 @@ PrefabInstance:
       propertyPath: propertyType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7930127205022493830, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
+        type: 3}
+      propertyPath: fallbackSlotContainer
+      value: 
+      objectReference: {fileID: 40684611}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3, type: 3}
 --- !u!224 &69040979 stripped
@@ -693,6 +699,7 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: potions
   propertyType: 1
+  fallbackSlotContainer: {fileID: 40684611}
   slotPrefab: {fileID: 7930127205022493825, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
     type: 3}
 --- !u!114 &467395538
@@ -1062,8 +1069,8 @@ MonoBehaviour:
   potions:
   - itemType: {fileID: 11400000, guid: 265642bd0143ae844bf5cb5c00ae0b43, type: 2}
     durability: 1
-  - itemType: {fileID: 0}
-    durability: 0
+  - itemType: {fileID: 11400000, guid: 113c283ff52676e4b85569903a7ea24b, type: 2}
+    durability: 1
 --- !u!1001 &1643765830
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1202,6 +1209,11 @@ PrefabInstance:
       propertyPath: propertyType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7930127205022493830, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
+        type: 3}
+      propertyPath: fallbackSlotContainer
+      value: 
+      objectReference: {fileID: 40684611}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3, type: 3}
 --- !u!224 &1643765831 stripped
@@ -1348,6 +1360,11 @@ PrefabInstance:
       propertyPath: propertyType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7930127205022493830, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
+        type: 3}
+      propertyPath: fallbackSlotContainer
+      value: 
+      objectReference: {fileID: 40684611}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3, type: 3}
 --- !u!224 &1792054206 stripped

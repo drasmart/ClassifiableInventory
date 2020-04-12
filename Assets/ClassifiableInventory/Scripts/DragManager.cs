@@ -96,30 +96,55 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private bool TryDrop(DraggableUI draggable, Slot slot)
     {
         var oldDraggable = slot.draggableUI;
-        var oldSlot = draggable.slot;
-        bool isSwap = oldDraggable;
-        if (draggable.draggableModel != null 
-            && PrefabAcceptsClasses(slot.gameObject, draggable.draggableModel.classes) 
-            && (!isSwap || (oldSlot && oldDraggable.draggableModel != null && PrefabAcceptsClasses(oldSlot.gameObject, oldDraggable.draggableModel.classes)))
-            )
+        if (draggable.draggableModel == null || !SlotAcceptsValue(slot, draggable.draggableModel))
         {
-            Attach(draggable, slot, true);
-            slot.draggableModel = draggable.draggableModel;
-            if (oldSlot)
-            {
-                if (oldDraggable)
-                {
-                    Attach(oldDraggable, oldSlot, true);
-                    oldSlot.draggableModel = oldDraggable.draggableModel;
-                }
-                else
-                {
-                    oldSlot.draggableModel = null;
-                }
-            }
-            return true;
+            // Can't accept draggable in this slot
+            return false;
         }
-        return false;
+        var oldSlot = draggable?.slot;
+        Slot swapSlot = null;
+        bool isSwap = oldDraggable;
+        if (isSwap)
+        {
+            var swapModel = oldDraggable.draggableModel;
+            if (swapModel == null)
+            {
+                return false;
+            }
+            do
+            {
+                if (oldSlot != null && SlotAcceptsValue(oldSlot, swapModel))
+                {
+                    swapSlot = oldSlot;
+                    break;
+                }
+                var primaryFallbackSlot = slot.fallbackSlotContainer?.FindFreeSlotFor(swapModel);
+                if (primaryFallbackSlot != null && SlotAcceptsValue(primaryFallbackSlot, swapModel))
+                {
+                    swapSlot = primaryFallbackSlot;
+                    break;
+                }
+                var otherFallbackSlot = oldSlot?.fallbackSlotContainer?.FindFreeSlotFor(swapModel);
+                if (otherFallbackSlot != null && SlotAcceptsValue(otherFallbackSlot, swapModel))
+                {
+                    swapSlot = otherFallbackSlot;
+                    break;
+                }
+                return false;
+            } while (false);
+        }
+        Attach(draggable, slot, true);
+        slot.draggableModel = draggable.draggableModel;
+        if (oldSlot)
+        {
+            oldSlot.draggableModel = null;
+        }
+        if (oldDraggable != null && swapSlot != null)
+        {
+            Attach(oldDraggable, swapSlot, true);
+            swapSlot.draggableModel = oldDraggable.draggableModel;
+        }
+        return true;
     }
 
     #region Game Object linking
@@ -182,7 +207,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
         var draggableUI = slot.draggableUI;
         var model = slot.draggableModel;
-        if (model == null)
+        if (model == null || model.IsNull)
         {
             if (draggableUI != null)
             {
@@ -223,6 +248,10 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             }
         }
         return null;
+    }
+    private static bool SlotAcceptsValue(Slot slot, DraggableModel model)
+    {
+        return PrefabAcceptsClasses(slot.gameObject, model.classes) || !slot.CanAcceptValue(model.GetType());
     }
     private static bool PrefabAcceptsClasses(GameObject prefab, Classifiable.TypeAsset[] classes)
     {

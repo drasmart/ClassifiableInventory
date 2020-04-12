@@ -14,17 +14,17 @@ public class Slot : BaseSlot
         get {
             object model = null;
             GetAccess(targetScript, property, propertyType,
-                (field) => model = field.GetValue(targetScript),
-                (list) => model = (index < list.Count) ? list[index] : null,
-                (array) => model = (index < array.Length) ? array.GetValue(index) : null,
+                (field, dataType) => model = field.GetValue(targetScript),
+                (list, dataType) => model = (index < list.Count) ? list[index] : null,
+                (array, dataType) => model = (index < array.Length) ? array.GetValue(index) : null,
                 null);
             return model as DraggableModel;
         }
         set {
             GetAccess(targetScript, property, propertyType,
-                (field) => field.SetValue(targetScript, value),
-                (list) => { if (index < list.Count) { list[index] = value; }; },
-                (array) => { if (index < array.Length) { array.SetValue(value, index); }; },
+                (field, dataType) => field.SetValue(targetScript, value),
+                (list, dataType) => { if (index < list.Count) { list[index] = value; }; },
+                (array, dataType) => { if (index < array.Length) { array.SetValue(value, index); }; },
                 null);
         }
     }
@@ -36,5 +36,21 @@ public class Slot : BaseSlot
     private void OnDisable()
     {
         DragManager.Instance.UpdateSlot(this, false);
+    }
+    public override Slot FindFreeSlotFor(DraggableModel model)
+    {
+        Type storageType = null;
+        object storedValue = null;
+        GetAccess(targetScript, property, propertyType,
+            (field, dataType) => { storageType = dataType; storedValue = field.GetValue(targetScript); },
+            (list, dataType) => { storageType = dataType; storedValue = (index < list.Count) ? list[index] : null; },
+            (array, dataType) => { storageType = dataType; storedValue = (index < array.Length) ? array.GetValue(index) : null; },
+            null);
+        bool hasSpace = (storedValue == null) || ((storedValue as DraggableModel)?.IsNull == true);
+        if (!(hasSpace && storageType != null && storageType.IsAssignableFrom(model.GetType())))
+        {
+            return null;
+        }
+        return this;
     }
 }

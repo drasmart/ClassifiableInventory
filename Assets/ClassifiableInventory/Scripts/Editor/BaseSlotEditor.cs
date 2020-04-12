@@ -10,7 +10,9 @@ public class BaseSlotEditor : Editor
     protected SerializedProperty targetProp;
     protected SerializedProperty propertyProp;
     protected SerializedProperty propertyTypeProp;
+    protected SerializedProperty fallbackSlotProp;
 
+    private bool unfoldReflectedProperty = true;
     private LastDropClick lastDropClick;
 
     protected virtual void OnEnable()
@@ -18,6 +20,7 @@ public class BaseSlotEditor : Editor
         targetProp = serializedObject.FindProperty("targetScript");
         propertyProp = serializedObject.FindProperty("property");
         propertyTypeProp = serializedObject.FindProperty("propertyType");
+        fallbackSlotProp = serializedObject.FindProperty("fallbackSlotContainer");
     }
 
     protected delegate void PropertyPickHandler();
@@ -44,12 +47,20 @@ public class BaseSlotEditor : Editor
             lastDropClick = null;
         }
 
-        EditorGUILayout.PropertyField(targetProp);
+        if (unfoldReflectedProperty = EditorGUILayout.Foldout(unfoldReflectedProperty, "Reflected Data"))
+        {
+            using (var h = new EditorGUI.IndentLevelScope(1))
+            {
+                EditorGUILayout.PropertyField(targetProp);
 
-        FindClassifiableFields();
+                DrawReflectedProperty();
+            }
+        }
+
+        EditorGUILayout.PropertyField(fallbackSlotProp);
     }
 
-    private void FindClassifiableFields()
+    protected virtual void DrawReflectedProperty()
     {
         using (var h = new EditorGUILayout.HorizontalScope())
         {

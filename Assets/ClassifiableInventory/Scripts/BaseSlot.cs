@@ -6,15 +6,17 @@ using Classification;
 
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(Classifiable))]
-public class BaseSlot : MonoBehaviour
+public abstract class BaseSlot : FallbackSlotContainer
 {
     public MonoBehaviour targetScript;
     public string property;
     public SlotPropertyType propertyType;
 
-    public delegate void FieldHandler(System.Reflection.FieldInfo field);
-    public delegate void ListHandler(IList collection);
-    public delegate void ArrayHandler(Array array);
+    public FallbackSlotContainer fallbackSlotContainer;
+
+    public delegate void FieldHandler(System.Reflection.FieldInfo field, Type dataType);
+    public delegate void ListHandler(IList collection, Type dataType);
+    public delegate void ArrayHandler(Array array, Type dataType);
     public delegate void FailHandler();
 
     public static void GetAccess(MonoBehaviour target, string property, SlotPropertyType propertyType, FieldHandler fieldHandler, ListHandler listHandler, ArrayHandler arrayHandler, FailHandler failHandler)
@@ -36,22 +38,30 @@ public class BaseSlot : MonoBehaviour
             switch (propertyType)
             {
                 case SlotPropertyType.Plain:
-                    fieldHandler?.Invoke(field);
+                    fieldHandler?.Invoke(field, fieldType);
                     return;
                 case SlotPropertyType.Array:
-                    if (fieldType.IsArray && q.IsAssignableFrom(fieldType.GetElementType()))
                     {
-                        arrayHandler?.Invoke(field.GetValue(target) as Array);
-                        return;
+                        var elementType = fieldType.GetElementType();
+                        if (fieldType.IsArray && q.IsAssignableFrom(elementType))
+                        {
+                            arrayHandler?.Invoke(field.GetValue(target) as Array, elementType);
+                            return;
+                        }
                     }
                     break;
                 case SlotPropertyType.List:
                     if (fieldType.IsGenericType)
                     {
                         var genericArgs = fieldType.GenericTypeArguments;
-                        if (genericArgs.Length == 1 && q.IsAssignableFrom(genericArgs[0]))
+                        if (genericArgs.Length != 1)
                         {
-                            listHandler?.Invoke(field.GetValue(target) as IList);
+                            break;
+                        }
+                        var elementType = genericArgs[0];
+                        if (q.IsAssignableFrom(elementType))
+                        {
+                            listHandler?.Invoke(field.GetValue(target) as IList, elementType);
                             return;
                         }
                     }
@@ -59,5 +69,16 @@ public class BaseSlot : MonoBehaviour
             }
         } while (false);
         failHandler?.Invoke();
+    }
+
+    public virtual bool CanAcceptValue(Type modelType)
+    {
+        Type storageType = null;
+        GetAccess(targetScript, property, propertyType,
+            (field, dataType) => storageType = dataType,
+            (list, dataType) => storageType = dataType,
+            (array, dataType) => storageType = dataType,
+            null);
+        return storageType != null && storageType.IsAssignableFrom(modelType);
     }
 }

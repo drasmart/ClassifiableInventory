@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18be8a5eb96c44f469625c3883bbf2dc, type: 3}
   m_Name: Iron_Helmet
   m_EditorClassIdentifier: 
-  slotType: {fileID: 11400000, guid: 9fbe03ac43689ed4c9217c3cf6a39208, type: 2}
+  slotTypes:
+  - {fileID: 11400000, guid: 9fbe03ac43689ed4c9217c3cf6a39208, type: 2}
   sprite: {fileID: 8372541301182709270, guid: e61d75d8816981d4494a900937152bb4, type: 3}
   durability: 96
