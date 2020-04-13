@@ -10,6 +10,7 @@ using System;
 public class SlotEditor : BaseSlotEditor
 {
     private SerializedProperty indexProp;
+    private SerializedProperty draggableContainerProp;
 
     private SerializedProperty draggableUIProp;
 
@@ -18,6 +19,7 @@ public class SlotEditor : BaseSlotEditor
     protected override void OnEnable()
     {
         base.OnEnable();
+        draggableContainerProp = serializedObject.FindProperty("draggableContainer");
         indexProp = serializedObject.FindProperty("index");
 
         draggableUIProp = serializedObject.FindProperty("draggableUI");
@@ -30,6 +32,8 @@ public class SlotEditor : BaseSlotEditor
             indexProp.intValue = newPropLength.Value;
             newPropLength = null;
         }
+
+        EditorGUILayout.PropertyField(draggableContainerProp);
 
         base.OnSlotInspection();
 

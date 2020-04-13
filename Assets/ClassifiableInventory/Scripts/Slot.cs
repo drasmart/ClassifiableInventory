@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class Slot : BaseSlot
 {
+    public RectTransform draggableContainer;
     public int index;
 
     public DraggableUI draggableUI;
