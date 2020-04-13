@@ -67,6 +67,11 @@ namespace Classification
             return null;
         }
 
+        public void Clear()
+        {
+            classes.Clear();
+        }
+
         public void AddAllFrom(Classifiable other)
         {
             foreach(var nextClass in other.classes)

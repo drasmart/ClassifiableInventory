@@ -10,11 +10,20 @@ public class SlotsGrid : BaseSlot
     public GameObject slotPrefab;
 
     private List<Slot> spawnedSlots = new List<Slot>();
+    private Classifiable classifiable;
+    private Slot slotPrime;
 
+    private void Awake()
+    {
+        classifiable = GetComponent<Classifiable>();
+        slotPrime = slotPrefab?.GetComponent<Slot>();
+    }
     private void Start()
     {
-        var classifiable = GetComponent<Classifiable>();
-        var slotPrime = slotPrefab?.GetComponent<Slot>();
+        UpdateAllSlots();
+    }
+    public override void UpdateAllSlots()
+    {
         if (slotPrime == null || classifiable == null)
         {
             return;
@@ -25,23 +34,48 @@ public class SlotsGrid : BaseSlot
             (list, dataType) => count = list.Count,
             (array, dataType) => count = array.Length,
             null);
-        for(int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
-            var nextSlot = Instantiate(slotPrime);
-            var nextClassifiable = nextSlot.GetComponent<Classifiable>();
+            if (i < spawnedSlots.Count)
+            {
+                var nextSlot = spawnedSlots[i];
+                var nextClassifiable = nextSlot.GetComponent<Classifiable>();
 
-            nextSlot.gameObject.SetActive(false);
+                nextSlot.targetScript = targetScript;
+                nextSlot.property = property;
+                nextSlot.propertyType = propertyType;
+                nextSlot.index = i;
 
-            nextSlot.targetScript = targetScript;
-            nextSlot.property = property;
-            nextSlot.propertyType = propertyType;
-            nextSlot.index = i;
-            nextClassifiable.AddAllFrom(classifiable);
-            nextSlot.transform.SetParent(transform, false);
+                nextClassifiable.Clear();
+                nextClassifiable.AddAllFrom(classifiable);
 
-            nextSlot.gameObject.SetActive(true);
+                nextSlot.gameObject.SetActive(true);
 
-            spawnedSlots.Add(nextSlot);
+                DragManager.Instance.UpdateSlot(nextSlot, nextSlot.enabled);
+            }
+            else
+            {
+                var nextSlot = Instantiate(slotPrime);
+                var nextClassifiable = nextSlot.GetComponent<Classifiable>();
+
+                nextSlot.gameObject.SetActive(false);
+
+                nextSlot.targetScript = targetScript;
+                nextSlot.property = property;
+                nextSlot.propertyType = propertyType;
+                nextSlot.index = i;
+                nextClassifiable.Clear();
+                nextClassifiable.AddAllFrom(classifiable);
+                nextSlot.transform.SetParent(transform, false);
+
+                nextSlot.gameObject.SetActive(true);
+
+                spawnedSlots.Add(nextSlot);
+            }
+        }
+        for(int i = count; i < spawnedSlots.Count; i++)
+        {
+            spawnedSlots[i].gameObject.SetActive(false);
         }
     }
     public override Slot FindFreeSlotFor(DraggableModel model)

@@ -4,5 +4,6 @@ using UnityEngine;
 
 public abstract class FallbackSlotContainer : MonoBehaviour
 {
+    public abstract void UpdateAllSlots();
     public abstract Slot FindFreeSlotFor(DraggableModel model);
 }

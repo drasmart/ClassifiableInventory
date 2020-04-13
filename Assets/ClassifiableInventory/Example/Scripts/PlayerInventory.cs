@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -12,4 +13,6 @@ public class PlayerInventory : MonoBehaviour
     public Item helmet;
 
     public Item[] potions;
+
+    public UnityEvent onDataUpdate;
 }

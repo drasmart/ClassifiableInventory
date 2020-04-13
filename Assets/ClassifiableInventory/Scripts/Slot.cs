@@ -37,6 +37,10 @@ public class Slot : BaseSlot
     {
         DragManager.Instance.UpdateSlot(this, false);
     }
+    public override void UpdateAllSlots()
+    {
+        DragManager.Instance.UpdateSlot(this, enabled);
+    }
     public override Slot FindFreeSlotFor(DraggableModel model)
     {
         Type storageType = null;

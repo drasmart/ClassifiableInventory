@@ -6,6 +6,13 @@ public class SlotsContainer : FallbackSlotContainer
 {
     public List<FallbackSlotContainer> subSlots;
 
+    public override void UpdateAllSlots()
+    {
+        foreach(var nextSubSlot in subSlots)
+        {
+            nextSubSlot?.UpdateAllSlots();
+        }
+    }
     public override Slot FindFreeSlotFor(DraggableModel model)
     {
         foreach(var nextSlot in subSlots)
