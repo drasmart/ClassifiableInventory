@@ -58,4 +58,9 @@ public class Slot : BaseSlot
         }
         return this;
     }
+    public override IEnumerable<Slot> GetAllSlots()
+    {
+        yield return this;
+        yield break;
+    }
 }

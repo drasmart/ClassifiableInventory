@@ -226,9 +226,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 16
-    m_Right: 0
+    m_Right: 16
     m_Top: 16
-    m_Bottom: 0
+    m_Bottom: 16
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
@@ -916,6 +916,76 @@ MonoBehaviour:
   dragItemPrefabs:
   - {fileID: 1102147593237040161, guid: 5b9e3582f6a12f242ab8f9e1fb85e3c1, type: 3}
   lastEventImage: {fileID: 84377652}
+  onDragStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1958998948}
+        m_MethodName: OnDragStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDragMoved:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1958998948}
+        m_MethodName: OnDragMoved
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDragDropped:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1958998948}
+        m_MethodName: OnDragDropped
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDragEnded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1958998948}
+        m_MethodName: OnDragEnded
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDragCancelled:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1958998948}
+        m_MethodName: OnDragCancelled
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1412171142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1433,6 +1503,7 @@ GameObject:
   - component: {fileID: 1958998947}
   - component: {fileID: 1958998946}
   - component: {fileID: 1958998945}
+  - component: {fileID: 1958998948}
   m_Layer: 5
   m_Name: Inventory Panel
   m_TagString: Untagged
@@ -1516,6 +1587,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1958998943}
   m_CullTransparentMesh: 0
+--- !u!114 &1958998948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958998943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c9e744f84978842a54a16de44ab928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1974495729
 GameObject:
   m_ObjectHideFlags: 0

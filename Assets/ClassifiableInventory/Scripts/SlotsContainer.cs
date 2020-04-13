@@ -25,4 +25,14 @@ public class SlotsContainer : FallbackSlotContainer
         }
         return null;
     }
+    public override IEnumerable<Slot> GetAllSlots()
+    {
+        foreach(var nextSlot in subSlots)
+        {
+            foreach (var subSlot in nextSlot.GetAllSlots()) {
+                yield return subSlot;
+            }
+        }
+        yield break;
+    }
 }

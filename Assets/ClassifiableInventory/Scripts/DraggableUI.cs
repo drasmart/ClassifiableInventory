@@ -13,4 +13,6 @@ public class DraggableUI : MonoBehaviour
     public DraggableModel draggableModel;
 
     public ModelUpdatedEvent onModelUpdate;
+
+    [System.Serializable] public class ModelUpdatedEvent : UnityEvent<DraggableModel> { }
 }

@@ -110,4 +110,8 @@ public class SlotsGrid : BaseSlot
         }
         return null;
     }
+    public override IEnumerable<Slot> GetAllSlots()
+    {
+        return spawnedSlots.FindAll((slot) => slot.gameObject.activeSelf);
+    }
 }

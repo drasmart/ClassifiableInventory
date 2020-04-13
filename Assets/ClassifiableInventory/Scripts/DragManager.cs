@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Classification;
@@ -31,6 +32,21 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     private List<RaycastResult> raycastResults = new List<RaycastResult>();
 
+    public DragStartedEvent onDragStarted;
+    public DragMovedEvent onDragMoved;
+    public DragMovedEvent onDragDropped;
+    public DragEndedEvent onDragEnded;
+    public DragCancelledEvent onDragCancelled;
+
+    private Slot dropCandidateSlot;
+    private Slot dropFallbackSlot;
+    private bool mayDrop;
+
+    [System.Serializable] public class DragStartedEvent : UnityEvent<PointerEventData, DraggableUI> { }
+    [System.Serializable] public class DragMovedEvent : UnityEvent<PointerEventData, DraggableUI, Slot, Slot> { }
+    [System.Serializable] public class DragEndedEvent : UnityEvent<PointerEventData, DraggableUI> { }
+    [System.Serializable] public class DragCancelledEvent : UnityEvent<DraggableUI> { }
+
     #region Unity Signals
     private void Awake()
     {
@@ -42,7 +58,8 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (instance == null)
         {
             instance = this;
-        } else
+        }
+        else
         {
             Debug.LogWarning("[" + transform.name + "] DragManager.instance already assigned to '" + instance.transform.name + "'");
             enabled = false;
@@ -60,15 +77,23 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             var dragPoint = GetDragPoint(eventData);
             dragOffset = draggedTransform.position - dragPoint;
             Detach(draggedItem, false);
+            onDragStarted?.Invoke(eventData, draggedItem);
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         Report("OnDrag", eventData);
-        if (draggedTransform != null)
+        if (draggedTransform == null)
         {
-            draggedTransform.position = dragOffset + GetDragPoint(eventData);
+            return;
+        }
+        draggedTransform.position = dragOffset + GetDragPoint(eventData);
+        if (onDragMoved != null)
+        {
+            dropCandidateSlot = GetFirstHit<Slot>(eventData, dragOffset);
+            UpdateDropVars();
+            onDragMoved.Invoke(eventData, draggedItem, dropCandidateSlot, dropFallbackSlot);
         }
     }
 
@@ -79,72 +104,85 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             return;
         }
-        var slot = GetFirstHit<Slot>(eventData, dragOffset);
-        bool dropped = false;
-        if (slot)
+        dropCandidateSlot = GetFirstHit<Slot>(eventData, dragOffset);
+        UpdateDropVars();
+        if (mayDrop)
         {
-            dropped = TryDrop(draggedItem, slot);
+            DoDrop();
+            var reportedDrag = draggedItem;
+            draggedItem = null;
+            onDragDropped?.Invoke(eventData, reportedDrag, dropCandidateSlot, dropFallbackSlot);
         }
-        if (!dropped)
+        else
         {
             Attach(draggedItem, draggedItem.slot, false);
+            onDragEnded?.Invoke(eventData, draggedItem);
         }
-        draggedItem = null;
     }
     #endregion
 
-    private bool TryDrop(DraggableUI draggable, Slot slot)
+    private void UpdateDropVars()
     {
-        var oldDraggable = slot.draggableUI;
-        if (draggable.draggableModel == null || !SlotAcceptsValue(slot, draggable.draggableModel))
+        if (dropCandidateSlot != null && (dropCandidateSlot == draggedItem.slot || !SlotAcceptsValue(dropCandidateSlot, draggedItem.draggableModel)))
+        {
+            dropCandidateSlot = null;
+        }
+        mayDrop = false;
+        dropFallbackSlot = null;
+        var oldDraggable = dropCandidateSlot?.draggableUI;
+        if (draggedItem.draggableModel == null || !SlotAcceptsValue(dropCandidateSlot, draggedItem.draggableModel))
         {
             // Can't accept draggable in this slot
-            return false;
+            return;
         }
-        var oldSlot = draggable?.slot;
-        Slot swapSlot = null;
+        var oldSlot = draggedItem?.slot;
         bool isSwap = oldDraggable;
         if (isSwap)
         {
             var swapModel = oldDraggable.draggableModel;
             if (swapModel == null)
             {
-                return false;
+                return;
             }
             do
             {
                 if (oldSlot != null && SlotAcceptsValue(oldSlot, swapModel))
                 {
-                    swapSlot = oldSlot;
+                    dropFallbackSlot = oldSlot;
                     break;
                 }
-                var primaryFallbackSlot = slot.fallbackSlotContainer?.FindFreeSlotFor(swapModel);
+                var primaryFallbackSlot = dropCandidateSlot.fallbackSlotContainer?.FindFreeSlotFor(swapModel);
                 if (primaryFallbackSlot != null && SlotAcceptsValue(primaryFallbackSlot, swapModel))
                 {
-                    swapSlot = primaryFallbackSlot;
+                    dropFallbackSlot = primaryFallbackSlot;
                     break;
                 }
                 var otherFallbackSlot = oldSlot?.fallbackSlotContainer?.FindFreeSlotFor(swapModel);
                 if (otherFallbackSlot != null && SlotAcceptsValue(otherFallbackSlot, swapModel))
                 {
-                    swapSlot = otherFallbackSlot;
+                    dropFallbackSlot = otherFallbackSlot;
                     break;
                 }
-                return false;
+                return;
             } while (false);
         }
-        Attach(draggable, slot, true);
-        slot.draggableModel = draggable.draggableModel;
+        mayDrop = true;
+    }
+    private void DoDrop()
+    {
+        var oldSlot = draggedItem.slot;
+        var oldDraggable = dropCandidateSlot.draggableUI;
+        Attach(draggedItem, dropCandidateSlot, true);
+        dropCandidateSlot.draggableModel = draggedItem.draggableModel;
         if (oldSlot)
         {
             oldSlot.draggableModel = null;
         }
-        if (oldDraggable != null && swapSlot != null)
+        if (oldDraggable != null && dropFallbackSlot != null)
         {
-            Attach(oldDraggable, swapSlot, true);
-            swapSlot.draggableModel = oldDraggable.draggableModel;
+            Attach(oldDraggable, dropFallbackSlot, true);
+            dropFallbackSlot.draggableModel = oldDraggable.draggableModel;
         }
-        return true;
     }
 
     #region Game Object linking
@@ -199,9 +237,11 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
         if (activationFront == false)
         {
-            if (slot.draggableUI == draggedItem)
+            if (draggedItem != null && slot.draggableUI == draggedItem)
             {
+                var reportedItem = draggedItem;
                 draggedItem = null;
+                onDragCancelled?.Invoke(reportedItem);
             }
             return;
         }
@@ -211,9 +251,11 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             if (draggableUI != null)
             {
-                if (draggableUI == draggedItem)
+                if (draggedItem != null && draggableUI == draggedItem)
                 {
+                    var reportedItem = draggedItem;
                     draggedItem = null;
+                    onDragCancelled?.Invoke(reportedItem);
                 }
                 Detach(draggableUI, true);
                 Despawn(draggableUI);
@@ -237,7 +279,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private DraggableUI SpawnDraggableUI(Slot slot)
     {
         var classes = slot.draggableModel.classes;
-        foreach(var nextPrefab in dragItemPrefabs)
+        foreach (var nextPrefab in dragItemPrefabs)
         {
             var draggable = nextPrefab.GetComponent<DraggableUI>();
             if (draggable && PrefabAcceptsClasses(nextPrefab, classes))
@@ -249,8 +291,12 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
         return null;
     }
-    private static bool SlotAcceptsValue(Slot slot, DraggableModel model)
+    public static bool SlotAcceptsValue(Slot slot, DraggableModel model)
     {
+        if (slot == null || model == null)
+        {
+            return false;
+        }
         return PrefabAcceptsClasses(slot.gameObject, model.classes) || !slot.CanAcceptValue(model.GetType());
     }
     private static bool PrefabAcceptsClasses(GameObject prefab, Classifiable.TypeAsset[] classes)
@@ -288,21 +334,22 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
 
 
-    private T GetFirstHit<T>(PointerEventData eventData, Vector3? localOffset = null) where T: MonoBehaviour
+    private T GetFirstHit<T>(PointerEventData eventData, Vector3? localOffset = null) where T : MonoBehaviour
     {
         PointerEventData testEvent;
         if (localOffset == null)
         {
             testEvent = eventData;
-        } else
+        }
+        else
         {
             testEvent = new PointerEventData(EventSystem.current);
             testEvent.position = eventData.position + GetEventPointDelta(localOffset.Value);
         }
         EventSystem.current.RaycastAll(testEvent, raycastResults);
-        foreach(var nextResult in raycastResults)
+        foreach (var nextResult in raycastResults)
         {
-            var t = nextResult.gameObject.GetComponent<T>();
+            var t = nextResult.gameObject.GetComponentInParent<T>();
             if (t != null)
             {
                 return t;
