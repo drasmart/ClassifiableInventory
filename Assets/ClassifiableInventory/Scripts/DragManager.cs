@@ -231,7 +231,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (draggableUI)
         {
             draggableUI.draggableModel = model;
-            draggableUI.onModelUpdate?.Invoke();
+            draggableUI.onModelUpdate?.Invoke(model);
         }
     }
     private DraggableUI SpawnDraggableUI(Slot slot)

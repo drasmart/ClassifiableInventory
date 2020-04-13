@@ -12,5 +12,5 @@ public class DraggableUI : MonoBehaviour
     public Slot slot;
     public DraggableModel draggableModel;
 
-    public UnityEvent onModelUpdate;
+    public ModelUpdatedEvent onModelUpdate;
 }

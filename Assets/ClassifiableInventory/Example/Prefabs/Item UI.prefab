@@ -95,7 +95,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4148574367120327013}
         m_MethodName: UpdateUI
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -131,9 +131,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 1102147593542072812}
-  item:
-    itemType: {fileID: 0}
-    durability: 0
 --- !u!1 &1102147593542072594
 GameObject:
   m_ObjectHideFlags: 0
