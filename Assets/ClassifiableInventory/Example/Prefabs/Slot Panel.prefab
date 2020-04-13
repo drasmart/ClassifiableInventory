@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.29411766}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -272,8 +272,8 @@ MonoBehaviour:
   backgroundColors:
     passive: {r: 1, g: 1, b: 1, a: 0.39215687}
     normal: {r: 1, g: 1, b: 1, a: 1}
-    source: {r: 0, g: 1, b: 1, a: 1}
-    swapSource: {r: 1, g: 0.3443396, b: 1, a: 1}
+    source: {r: 1, g: 1, b: 1, a: 0.39215687}
+    swapSource: {r: 0, g: 1, b: 1, a: 0.39215687}
     dropDestination: {r: 0, g: 0.6415094, b: 0, a: 0.39215687}
     swapDestination: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.39215687}
-    swapFallback: {r: 1, g: 0, b: 1, a: 0.39215687}
+    swapFallback: {r: 0, g: 1, b: 1, a: 0.39215687}
