@@ -45,6 +45,9 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     [Header("Validation")]
     public DropTransactionValidationEvent validationEvent;
 
+    [Header("Combination")]
+    public DropTransactionValidationEvent combinationEvent;
+
     [System.Serializable] public class DragStartedEvent : UnityEvent<PointerEventData, DraggableUI> { }
     [System.Serializable] public class DropTransactionValidationEvent : UnityEvent<DropTransaction> { }
     [System.Serializable] public class DragMovedEvent : UnityEvent<PointerEventData, DropTransaction> { }
@@ -114,15 +117,33 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         var dropTransaction = MakeDropTransaction(eventData);
         if (dropTransaction.valid)
         {
+            combinationEvent?.Invoke(dropTransaction);
+            if (!dropTransaction.valid)
+            {
+                if (draggedItem?.slot != null)
+                {
+                    draggedItem.slot?.UpdateAllSlots();
+                    if (draggedItem?.slot != null)
+                    {
+                        Attach(draggedItem, draggedItem.slot, false);
+                    }
+                }
+                draggedItem = null;
+                onDragCancelled?.Invoke(dropTransaction.draggableUI);
+                return;
+            }
+        }
+        if (dropTransaction.valid)
+        {
             DoDrop(dropTransaction);
             draggedItem = null;
             onDragDropped?.Invoke(eventData, dropTransaction);
+            return;
         }
-        else
-        {
-            Attach(draggedItem, draggedItem.slot, false);
-            onDragEnded?.Invoke(eventData, draggedItem);
-        }
+        Attach(draggedItem, draggedItem.slot, false);
+        draggedItem = null;
+        onDragEnded?.Invoke(eventData, dropTransaction.draggableUI);
+
     }
     #endregion
 
@@ -149,7 +170,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             if (dropCandidateSlot == draggedItem.slot)
             {
                 // drop on source
-                return new DropTransaction(draggedItem, dropCandidateSlot, null, true);
+                return new DropTransaction(draggedItem, dropCandidateSlot, null, false);
             }
             if (!SlotAcceptsValue(dropCandidateSlot, draggedItem.draggableModel))
             {
@@ -203,10 +224,10 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
     private void DoDrop(DropTransaction transaction)
     {
-        var oldSlot = draggedItem.slot;
+        var oldSlot = transaction.draggableUI.slot;
         var oldDraggable = transaction.dropSlot.draggableUI;
-        Attach(draggedItem, transaction.dropSlot, true);
-        transaction.dropSlot.draggableModel = draggedItem.draggableModel;
+        Attach(transaction.draggableUI, transaction.dropSlot, true);
+        transaction.dropSlot.draggableModel = transaction.draggableUI.draggableModel;
         if (oldSlot)
         {
             oldSlot.draggableModel = null;

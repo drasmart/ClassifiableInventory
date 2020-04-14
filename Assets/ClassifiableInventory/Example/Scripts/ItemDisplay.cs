@@ -5,14 +5,21 @@ using UnityEngine.UI;
 
 public class ItemDisplay : MonoBehaviour
 {
-    public Image icon;
+    public Image iconImage;
+    public Text countText;
 
     public void UpdateUI(DraggableModel draggableModel)
     {
         var item = draggableModel as Item;
-        if (icon)
+        if (iconImage)
         {
-            icon.sprite = item?.itemType?.sprite;
+            iconImage.sprite = item?.itemType?.sprite;
+        }
+        if (countText)
+        {
+            var count = item?.count ?? 0;
+            countText.text = count.ToString();
+            countText.gameObject.SetActive(count > 1);
         }
     }
 }

@@ -824,6 +824,7 @@ GameObject:
   - component: {fileID: 683303740}
   - component: {fileID: 683303739}
   - component: {fileID: 683303742}
+  - component: {fileID: 683303743}
   m_Layer: 5
   m_Name: AspectFit Panel + DragManager
   m_TagString: Untagged
@@ -1000,6 +1001,32 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  combinationEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 683303743}
+        m_MethodName: OnStackAttempt
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &683303743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683303737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9ee5e338f7ef8445ae3ba4ed95ad90a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1412171142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1146,26 +1173,35 @@ MonoBehaviour:
   backpack:
   - itemType: {fileID: 0}
     durability: 0
+    count: 0
   - itemType: {fileID: 11400000, guid: 787c56d04f704924abbbf3e867d94864, type: 2}
     durability: 1
+    count: 2
   - itemType: {fileID: 11400000, guid: a3be51ef9894ed94fbdd5de480e9ab54, type: 2}
     durability: 1
+    count: 1
   - itemType: {fileID: 0}
     durability: 0
+    count: 0
   weapon:
     itemType: {fileID: 11400000, guid: e00ae5fd47dc5f84d81911c073793f8e, type: 2}
     durability: 1
+    count: 1
   body:
     itemType: {fileID: 0}
     durability: 0
+    count: 0
   helmet:
     itemType: {fileID: 11400000, guid: 11e5a1c85193ae741ae7d6a6d0f0c1ee, type: 2}
     durability: 1
+    count: 1
   potions:
   - itemType: {fileID: 11400000, guid: 265642bd0143ae844bf5cb5c00ae0b43, type: 2}
     durability: 1
+    count: 1
   - itemType: {fileID: 11400000, guid: 113c283ff52676e4b85569903a7ea24b, type: 2}
     durability: 1
+    count: 1
   onDataUpdate:
     m_PersistentCalls:
       m_Calls:
@@ -1204,7 +1240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 1434239737}
-  itemType: {fileID: 11400000, guid: fa3c505d91042744b9ebef13db538152, type: 2}
+  itemType: {fileID: 11400000, guid: 787c56d04f704924abbbf3e867d94864, type: 2}
 --- !u!1001 &1643765830
 PrefabInstance:
   m_ObjectHideFlags: 0
