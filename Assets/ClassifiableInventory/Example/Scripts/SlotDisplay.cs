@@ -26,5 +26,6 @@ public class SlotDisplay : MonoBehaviour
         public Color dropDestination = Color.green;
         public Color swapDestination = Color.yellow;
         public Color swapFallback = Color.red;
+        public Color invalidTransaction = Color.red;
     }
 }

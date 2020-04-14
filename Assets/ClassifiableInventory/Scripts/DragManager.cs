@@ -24,26 +24,29 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private RectTransform draggedTransform { get { return draggedItem?.transform as RectTransform; } }
     private Vector3 dragOffset;
 
+    [Header("Prefabs")]
     public GameObject[] dragItemPrefabs;
 
+    [Header("Debug")]
     public RectTransform lastEventImage;
 
     private Canvas canvas;
 
     private List<RaycastResult> raycastResults = new List<RaycastResult>();
 
+    [Header("Drag Events")]
     public DragStartedEvent onDragStarted;
     public DragMovedEvent onDragMoved;
     public DragMovedEvent onDragDropped;
     public DragEndedEvent onDragEnded;
     public DragCancelledEvent onDragCancelled;
 
-    private Slot dropCandidateSlot;
-    private Slot dropFallbackSlot;
-    private bool mayDrop;
+    [Header("Validation")]
+    public DropTransactionValidationEvent validationEvent;
 
     [System.Serializable] public class DragStartedEvent : UnityEvent<PointerEventData, DraggableUI> { }
-    [System.Serializable] public class DragMovedEvent : UnityEvent<PointerEventData, DraggableUI, Slot, Slot> { }
+    [System.Serializable] public class DropTransactionValidationEvent : UnityEvent<DropTransaction> { }
+    [System.Serializable] public class DragMovedEvent : UnityEvent<PointerEventData, DropTransaction> { }
     [System.Serializable] public class DragEndedEvent : UnityEvent<PointerEventData, DraggableUI> { }
     [System.Serializable] public class DragCancelledEvent : UnityEvent<DraggableUI> { }
 
@@ -91,9 +94,8 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         draggedTransform.position = dragOffset + GetDragPoint(eventData);
         if (onDragMoved != null)
         {
-            dropCandidateSlot = GetFirstHit<Slot>(eventData, dragOffset);
-            UpdateDropVars();
-            onDragMoved.Invoke(eventData, draggedItem, dropCandidateSlot, dropFallbackSlot);
+            var dropTransaction = MakeDropTransaction(eventData);
+            onDragMoved.Invoke(eventData, dropTransaction);
         }
     }
 
@@ -104,14 +106,12 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             return;
         }
-        dropCandidateSlot = GetFirstHit<Slot>(eventData, dragOffset);
-        UpdateDropVars();
-        if (mayDrop)
+        var dropTransaction = MakeDropTransaction(eventData);
+        if (dropTransaction.valid)
         {
-            DoDrop();
-            var reportedDrag = draggedItem;
+            DoDrop(dropTransaction);
             draggedItem = null;
-            onDragDropped?.Invoke(eventData, reportedDrag, dropCandidateSlot, dropFallbackSlot);
+            onDragDropped?.Invoke(eventData, dropTransaction);
         }
         else
         {
@@ -121,19 +121,33 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
     #endregion
 
-    private void UpdateDropVars()
+    private DropTransaction MakeDropTransaction(PointerEventData eventData)
     {
-        if (dropCandidateSlot != null && (dropCandidateSlot == draggedItem.slot || !SlotAcceptsValue(dropCandidateSlot, draggedItem.draggableModel)))
+        var dropCandidateSlot = GetFirstHit<Slot>(eventData, dragOffset);
+        if (dropCandidateSlot == null || draggedItem.draggableModel == null)
         {
-            dropCandidateSlot = null;
+            // no slot to drop, or no model to check acceptance
+            return new DropTransaction(draggedItem, null, null, false);
         }
-        mayDrop = false;
-        dropFallbackSlot = null;
+        if (dropCandidateSlot != null)
+        {
+            if (dropCandidateSlot == draggedItem.slot)
+            {
+                // drop on source
+                return new DropTransaction(draggedItem, dropCandidateSlot, null, true);
+            }
+            if (!SlotAcceptsValue(dropCandidateSlot, draggedItem.draggableModel))
+            {
+                // slot does not accept dragged model
+                return new DropTransaction(draggedItem, dropCandidateSlot, null, false);
+            }
+        }
+        Slot dropFallbackSlot = null;
         var oldDraggable = dropCandidateSlot?.draggableUI;
         if (draggedItem.draggableModel == null || !SlotAcceptsValue(dropCandidateSlot, draggedItem.draggableModel))
         {
             // Can't accept draggable in this slot
-            return;
+            return new DropTransaction(draggedItem, dropCandidateSlot, null, false);
         }
         var oldSlot = draggedItem?.slot;
         bool isSwap = oldDraggable;
@@ -142,7 +156,8 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             var swapModel = oldDraggable.draggableModel;
             if (swapModel == null)
             {
-                return;
+                // candidate slot has draggable without model
+                return new DropTransaction(draggedItem, dropCandidateSlot, null, false);
             }
             do
             {
@@ -163,25 +178,28 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                     dropFallbackSlot = otherFallbackSlot;
                     break;
                 }
-                return;
+                // fallback slot not found
+                return new DropTransaction(draggedItem, dropCandidateSlot, null, false);
             } while (false);
         }
-        mayDrop = true;
+        var result = new DropTransaction(draggedItem, dropCandidateSlot, dropFallbackSlot, true);
+        validationEvent?.Invoke(result);
+        return result;
     }
-    private void DoDrop()
+    private void DoDrop(DropTransaction transaction)
     {
         var oldSlot = draggedItem.slot;
-        var oldDraggable = dropCandidateSlot.draggableUI;
-        Attach(draggedItem, dropCandidateSlot, true);
-        dropCandidateSlot.draggableModel = draggedItem.draggableModel;
+        var oldDraggable = transaction.dropSlot.draggableUI;
+        Attach(draggedItem, transaction.dropSlot, true);
+        transaction.dropSlot.draggableModel = draggedItem.draggableModel;
         if (oldSlot)
         {
             oldSlot.draggableModel = null;
         }
-        if (oldDraggable != null && dropFallbackSlot != null)
+        if (oldDraggable != null && transaction.fallbackSlot != null)
         {
-            Attach(oldDraggable, dropFallbackSlot, true);
-            dropFallbackSlot.draggableModel = oldDraggable.draggableModel;
+            Attach(oldDraggable, transaction.fallbackSlot, true);
+            transaction.fallbackSlot.draggableModel = oldDraggable.draggableModel;
         }
     }
 

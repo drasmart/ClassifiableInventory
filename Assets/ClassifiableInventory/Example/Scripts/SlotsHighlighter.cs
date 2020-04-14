@@ -30,26 +30,45 @@ public class SlotsHighlighter : MonoBehaviour
             }
         });
     }
-    public void OnDragMoved(PointerEventData eventData, DraggableUI draggableUI, Slot dropSlot, Slot fallbackSlot)
+    public void OnDragMoved(PointerEventData eventData, DropTransaction transaction)
     {
         ForEachSlot((slot, display) =>
         {
             var colors = display.backgroundColors;
-            if (slot == draggableUI.slot)
+            if (transaction.valid)
             {
-                display.backgroundImage.color = (slot == fallbackSlot) ? colors.swapSource : colors.source;
-            } else if (slot == dropSlot)
-            {
-                display.backgroundImage.color = (slot.draggableModel == null || slot.draggableModel.IsNull) ? colors.dropDestination : colors.swapDestination;
+                if (slot == transaction.draggableUI.slot)
+                {
+                    display.backgroundImage.color = (slot == transaction.fallbackSlot) ? colors.swapSource : colors.source;
+                }
+                else if (slot == transaction.dropSlot)
+                {
+                    display.backgroundImage.color = (slot.draggableModel == null || slot.draggableModel.IsNull) ? colors.dropDestination : colors.swapDestination;
+                }
+                else
+                {
+                    display.backgroundImage.color = (slot == transaction.fallbackSlot) ? colors.swapFallback : colors.normal;
+                }
             } else
             {
-                display.backgroundImage.color = (slot == fallbackSlot) ? colors.swapFallback : colors.normal;
+                if (slot == transaction.draggableUI.slot)
+                {
+                    display.backgroundImage.color = colors.source;
+                }
+                else if (slot == transaction.dropSlot)
+                {
+                    display.backgroundImage.color = DragManager.SlotAcceptsValue(slot, transaction.draggableUI.draggableModel) ? colors.invalidTransaction : colors.normal;
+                }
+                else
+                {
+                    display.backgroundImage.color = colors.normal;
+                }
             }
         });
     }
-    public void OnDragDropped(PointerEventData eventData, DraggableUI draggableUI, Slot dropSlot, Slot fallbackSlot)
+    public void OnDragDropped(PointerEventData eventData, DropTransaction transaction)
     {
-        OnDragCancelled(draggableUI);
+        OnDragCancelled(transaction.draggableUI);
     }
     public void OnDragEnded(PointerEventData eventData, DraggableUI draggableUI)
     {
