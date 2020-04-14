@@ -32,6 +32,7 @@ public class SlotsHighlighter : MonoBehaviour
     }
     public void OnDragMoved(PointerEventData eventData, DropTransaction transaction)
     {
+        bool dropSlotAccepts = DragManager.SlotAcceptsValue(transaction.dropSlot, transaction.draggableUI.draggableModel);
         ForEachSlot((slot, display) =>
         {
             var colors = display.backgroundColors;
@@ -53,11 +54,11 @@ public class SlotsHighlighter : MonoBehaviour
             {
                 if (slot == transaction.draggableUI.slot)
                 {
-                    display.backgroundImage.color = colors.source;
+                    display.backgroundImage.color = (slot == transaction.dropSlot || transaction.dropSlot == null || !dropSlotAccepts) ? colors.source : colors.invalidSource;
                 }
                 else if (slot == transaction.dropSlot)
                 {
-                    display.backgroundImage.color = DragManager.SlotAcceptsValue(slot, transaction.draggableUI.draggableModel) ? colors.invalidTransaction : colors.normal;
+                    display.backgroundImage.color = dropSlotAccepts ? colors.invalidDestination : colors.normal;
                 }
                 else
                 {

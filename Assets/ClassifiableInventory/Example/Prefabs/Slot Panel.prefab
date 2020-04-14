@@ -277,3 +277,5 @@ MonoBehaviour:
     dropDestination: {r: 0, g: 0.6415094, b: 0, a: 0.39215687}
     swapDestination: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.39215687}
     swapFallback: {r: 0, g: 1, b: 1, a: 0.39215687}
+    invalidDestination: {r: 1, g: 0, b: 0, a: 1}
+    invalidSource: {r: 1, g: 0, b: 0, a: 0.39215687}
