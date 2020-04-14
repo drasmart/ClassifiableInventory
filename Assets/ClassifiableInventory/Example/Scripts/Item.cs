@@ -23,4 +23,12 @@ public class Item : DraggableModel
     }
 
     public bool IsNull { get { return itemType == null; } }
+
+    public Item(ItemType itemType, int durability)
+    {
+        this.itemType = itemType;
+        this.durability = durability;
+    }
+    public Item(ItemType itemType) : this(itemType, itemType.durability) { }
+    public Item() : this(null, 0) { }
 }

@@ -33,6 +33,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private Canvas canvas;
 
     private List<RaycastResult> raycastResults = new List<RaycastResult>();
+    private Vector2 lastEventPosition;
 
     [Header("Drag Events")]
     public DragStartedEvent onDragStarted;
@@ -87,6 +88,10 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public void OnDrag(PointerEventData eventData)
     {
         Report("OnDrag", eventData);
+        HandleDrag(eventData);
+    }
+    private void HandleDrag(PointerEventData eventData)
+    {
         if (draggedTransform == null)
         {
             return;
@@ -120,6 +125,16 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
     }
     #endregion
+
+    public void RefreshDrag()
+    {
+        if (draggedItem != null)
+        {
+            var fakeEvent = new PointerEventData(EventSystem.current);
+            fakeEvent.position = lastEventPosition;
+            HandleDrag(fakeEvent);
+        }
+    }
 
     private DropTransaction MakeDropTransaction(PointerEventData eventData)
     {
@@ -378,6 +393,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     private void Report(string method, PointerEventData eventData)
     {
+        lastEventPosition = eventData.position;
         //Debug.Log("[" + method + "]: " + eventData.ToString());
 
         var lastEventPoint = GetDragPoint(eventData);
