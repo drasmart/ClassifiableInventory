@@ -41,10 +41,7 @@ public class SlotsGrid : BaseSlot
                 var nextSlot = spawnedSlots[i];
                 var nextClassifiable = nextSlot.GetComponent<Classifiable>();
 
-                nextSlot.targetScript = targetScript;
-                nextSlot.property = property;
-                nextSlot.propertyType = propertyType;
-                nextSlot.index = i;
+                SetupSlot(nextSlot, i);
 
                 nextClassifiable.Clear();
                 nextClassifiable.AddAllFrom(classifiable);
@@ -60,10 +57,7 @@ public class SlotsGrid : BaseSlot
 
                 nextSlot.gameObject.SetActive(false);
 
-                nextSlot.targetScript = targetScript;
-                nextSlot.property = property;
-                nextSlot.propertyType = propertyType;
-                nextSlot.index = i;
+                SetupSlot(nextSlot, i);
                 nextClassifiable.Clear();
                 nextClassifiable.AddAllFrom(classifiable);
                 nextSlot.transform.SetParent(transform, false);
@@ -77,6 +71,14 @@ public class SlotsGrid : BaseSlot
         {
             spawnedSlots[i].gameObject.SetActive(false);
         }
+    }
+    private void SetupSlot(Slot slot, int index)
+    {
+        slot.targetScript = targetScript;
+        slot.property = property;
+        slot.propertyType = propertyType;
+        slot.index = index;
+        slot.fallbackSlotContainer = fallbackSlotContainer;
     }
     public override Slot FindFreeSlotFor(DraggableModel model)
     {
