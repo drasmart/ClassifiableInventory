@@ -265,7 +265,7 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: backpack
   propertyType: 2
-  keepShadowWhileDragging: 1
+  dragMode: 0
   fallbackSlotContainer: {fileID: 0}
   slotPrefab: {fileID: 7930127205022493825, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
     type: 3}
@@ -415,6 +415,11 @@ PrefabInstance:
     - target: {fileID: 7930127205022493830, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
         type: 3}
       propertyPath: keepShadowWhileDragging
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930127205022493830, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
+        type: 3}
+      propertyPath: dragMode
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -717,7 +722,7 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: potions
   propertyType: 1
-  keepShadowWhileDragging: 1
+  dragMode: 2
   fallbackSlotContainer: {fileID: 40684611}
   slotPrefab: {fileID: 7930127205022493825, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
     type: 3}
@@ -833,7 +838,7 @@ GameObject:
   - component: {fileID: 683303742}
   - component: {fileID: 683303743}
   m_Layer: 5
-  m_Name: AspectFit Panel + DragManager
+  m_Name: AspectFit Panel + DragManager + Stacks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1396,6 +1401,11 @@ PrefabInstance:
       propertyPath: keepShadowWhileDragging
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7930127205022493830, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
+        type: 3}
+      propertyPath: dragMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3, type: 3}
 --- !u!224 &1643765831 stripped
@@ -1564,6 +1574,11 @@ PrefabInstance:
       propertyPath: keepShadowWhileDragging
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7930127205022493830, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
+        type: 3}
+      propertyPath: dragMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3, type: 3}
 --- !u!224 &1792054206 stripped
@@ -1662,7 +1677,7 @@ GameObject:
   - component: {fileID: 1958998945}
   - component: {fileID: 1958998948}
   m_Layer: 5
-  m_Name: Inventory Panel
+  m_Name: Inventory Panel + Slots Highlighter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

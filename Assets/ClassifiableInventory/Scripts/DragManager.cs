@@ -49,7 +49,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     [Header("Combination")]
     public DropTransactionValidationEvent combinationEvent;
 
-    [System.Serializable] public class DragStartedEvent : UnityEvent<PointerEventData, DraggableUI> { }
+    [System.Serializable] public class DragStartedEvent : UnityEvent<PointerEventData, DraggableUI, Slot> { }
     [System.Serializable] public class DropTransactionValidationEvent : UnityEvent<DropTransaction> { }
     [System.Serializable] public class DragMovedEvent : UnityEvent<PointerEventData, DropTransaction> { }
     [System.Serializable] public class DragEndedEvent : UnityEvent<PointerEventData, DraggableUI> { }
@@ -84,19 +84,29 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             return;
         }
-        if (draggedItem.slot?.keepShadowWhileDragging == true)
+        var slot = draggedItem.slot;
+        var dragMode = slot?.dragMode;
+        if (dragMode == BaseSlot.DragMode.KeepShadowWhileDragging)
         {
-            shadowClone = SpawnDraggableUI(draggedItem.slot, false);
+            shadowClone = SpawnDraggableUI(slot, false);
             if (shadowClone)
             {
-                shadowClone.draggableModel = draggedItem.slot.draggableModel;
+                shadowClone.draggableModel = slot.draggableModel;
                 shadowClone.onModelUpdate?.Invoke(shadowClone.draggableModel, true);
             }
         }
         var dragPoint = GetDragPoint(eventData);
         dragOffset = draggedTransform.position - dragPoint;
-        Detach(draggedItem, false);
-        onDragStarted?.Invoke(eventData, draggedItem);
+        if (dragMode == BaseSlot.DragMode.DetachOnDrag)
+        {
+            Detach(draggedItem, true);
+            slot.draggableModel = null;
+        }
+        else
+        {
+            Detach(draggedItem, false);
+        }
+        onDragStarted?.Invoke(eventData, draggedItem, slot);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -253,6 +263,10 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     #region Game Object linking
     private void Attach(DraggableUI draggable, Slot slot, bool link)
     {
+        if (slot == null)
+        {
+            return;
+        }
         var dragTransform = draggable.transform as RectTransform;
         var slotTransform = slot.draggableContainer ?? (slot.transform as RectTransform);
         dragTransform.SetParent(slotTransform, true);

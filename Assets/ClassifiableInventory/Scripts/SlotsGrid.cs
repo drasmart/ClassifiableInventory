@@ -79,7 +79,7 @@ public class SlotsGrid : BaseSlot
         slot.propertyType = propertyType;
         slot.index = index;
         slot.fallbackSlotContainer = fallbackSlotContainer;
-        slot.keepShadowWhileDragging = keepShadowWhileDragging;
+        slot.dragMode = dragMode;
     }
     public override Slot FindFreeSlotFor(DraggableModel model)
     {

@@ -12,7 +12,14 @@ public abstract class BaseSlot : FallbackSlotContainer
     public string property;
     public SlotPropertyType propertyType;
 
-    public bool keepShadowWhileDragging;
+    [System.Serializable]
+    public enum DragMode
+    {
+        DetachOnDrag = 0,
+        BounceBackOnDrop,
+        KeepShadowWhileDragging,
+    }
+    public DragMode dragMode = DragMode.BounceBackOnDrop;
     public FallbackSlotContainer fallbackSlotContainer;
 
     public delegate void FieldHandler(System.Reflection.FieldInfo field, Type dataType);

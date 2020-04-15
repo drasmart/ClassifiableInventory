@@ -14,7 +14,7 @@ public class SlotsHighlighter : MonoBehaviour
         slotsContainer = GetComponent<SlotsContainer>();
     }
 
-    public void OnDragStarted(PointerEventData eventData, DraggableUI draggableUI)
+    public void OnDragStarted(PointerEventData eventData, DraggableUI draggableUI, Slot sourceSlot)
     {
         ForEachSlot((slot, display) =>
         {
