@@ -21,6 +21,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private static DragManager instance;
 
     private DraggableUI draggedItem;
+    private DraggableUI shadowClone;
     private RectTransform draggedTransform { get { return draggedItem?.transform as RectTransform; } }
     private Vector3 dragOffset;
 
@@ -79,13 +80,23 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         Report("OnBeginDrag", eventData);
         draggedItem = GetFirstHit<DraggableUI>(eventData);
-        if (draggedItem != null)
+        if (draggedItem == null)
         {
-            var dragPoint = GetDragPoint(eventData);
-            dragOffset = draggedTransform.position - dragPoint;
-            Detach(draggedItem, false);
-            onDragStarted?.Invoke(eventData, draggedItem);
+            return;
         }
+        if (draggedItem.slot?.keepShadowWhileDragging == true)
+        {
+            shadowClone = SpawnDraggableUI(draggedItem.slot, false);
+            if (shadowClone)
+            {
+                shadowClone.draggableModel = draggedItem.slot.draggableModel;
+                shadowClone.onModelUpdate?.Invoke(shadowClone.draggableModel, true);
+            }
+        }
+        var dragPoint = GetDragPoint(eventData);
+        dragOffset = draggedTransform.position - dragPoint;
+        Detach(draggedItem, false);
+        onDragStarted?.Invoke(eventData, draggedItem);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -128,7 +139,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                         Attach(draggedItem, draggedItem.slot, false);
                     }
                 }
-                draggedItem = null;
+                ClearDragData();
                 onDragCancelled?.Invoke(dropTransaction.draggableUI);
                 return;
             }
@@ -136,12 +147,12 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (dropTransaction.valid)
         {
             DoDrop(dropTransaction);
-            draggedItem = null;
+            ClearDragData();
             onDragDropped?.Invoke(eventData, dropTransaction);
             return;
         }
         Attach(draggedItem, draggedItem.slot, false);
-        draggedItem = null;
+        ClearDragData();
         onDragEnded?.Invoke(eventData, dropTransaction.draggableUI);
 
     }
@@ -294,7 +305,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             if (draggedItem != null && slot.draggableUI == draggedItem)
             {
                 var reportedItem = draggedItem;
-                draggedItem = null;
+                ClearDragData();
                 onDragCancelled?.Invoke(reportedItem);
             }
             return;
@@ -308,7 +319,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                 if (draggedItem != null && draggableUI == draggedItem)
                 {
                     var reportedItem = draggedItem;
-                    draggedItem = null;
+                    ClearDragData();
                     onDragCancelled?.Invoke(reportedItem);
                 }
                 Detach(draggableUI, true);
@@ -322,15 +333,15 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             {
                 return;
             }
-            draggableUI = SpawnDraggableUI(slot);
+            draggableUI = SpawnDraggableUI(slot, true);
         }
         if (draggableUI)
         {
             draggableUI.draggableModel = model;
-            draggableUI.onModelUpdate?.Invoke(model);
+            draggableUI.onModelUpdate?.Invoke(model, false);
         }
     }
-    private DraggableUI SpawnDraggableUI(Slot slot)
+    private DraggableUI SpawnDraggableUI(Slot slot, bool link)
     {
         var classes = slot.draggableModel.classes;
         foreach (var nextPrefab in dragItemPrefabs)
@@ -339,11 +350,20 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             if (draggable && PrefabAcceptsClasses(nextPrefab, classes))
             {
                 var clone = SpawnPrefab(draggable);
-                Attach(clone, slot, true);
+                Attach(clone, slot, link);
                 return clone;
             }
         }
         return null;
+    }
+    private void ClearDragData()
+    {
+        draggedItem = null;
+        if (shadowClone != null)
+        {
+            Despawn(shadowClone);
+            shadowClone = null;
+        }
     }
     public static bool SlotAcceptsValue(Slot slot, DraggableModel model)
     {

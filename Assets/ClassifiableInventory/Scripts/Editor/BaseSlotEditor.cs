@@ -11,6 +11,7 @@ public class BaseSlotEditor : Editor
     protected SerializedProperty propertyProp;
     protected SerializedProperty propertyTypeProp;
     protected SerializedProperty fallbackSlotProp;
+    protected SerializedProperty keepShadowWhileDraggingProp;
 
     private bool unfoldReflectedProperty = true;
     private LastDropClick lastDropClick;
@@ -21,6 +22,7 @@ public class BaseSlotEditor : Editor
         propertyProp = serializedObject.FindProperty("property");
         propertyTypeProp = serializedObject.FindProperty("propertyType");
         fallbackSlotProp = serializedObject.FindProperty("fallbackSlotContainer");
+        keepShadowWhileDraggingProp = serializedObject.FindProperty("keepShadowWhileDragging");
     }
 
     protected delegate void PropertyPickHandler();
@@ -58,6 +60,7 @@ public class BaseSlotEditor : Editor
         }
 
         EditorGUILayout.PropertyField(fallbackSlotProp);
+        EditorGUILayout.PropertyField(keepShadowWhileDraggingProp);
     }
 
     protected virtual void DrawReflectedProperty()

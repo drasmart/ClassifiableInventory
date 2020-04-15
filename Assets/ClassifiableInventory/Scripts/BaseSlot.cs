@@ -12,6 +12,7 @@ public abstract class BaseSlot : FallbackSlotContainer
     public string property;
     public SlotPropertyType propertyType;
 
+    public bool keepShadowWhileDragging;
     public FallbackSlotContainer fallbackSlotContainer;
 
     public delegate void FieldHandler(System.Reflection.FieldInfo field, Type dataType);

@@ -11,8 +11,9 @@ public class DraggableUI : MonoBehaviour
 {
     public Slot slot;
     public DraggableModel draggableModel;
+    public bool isShadow;
 
     public ModelUpdatedEvent onModelUpdate;
 
-    [System.Serializable] public class ModelUpdatedEvent : UnityEvent<DraggableModel> { }
+    [System.Serializable] public class ModelUpdatedEvent : UnityEvent<DraggableModel, bool> { }
 }

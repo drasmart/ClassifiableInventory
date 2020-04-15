@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: {fileID: 0}
+  isShadow: 0
   onModelUpdate:
     m_PersistentCalls:
       m_Calls:
@@ -133,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iconImage: {fileID: 1102147593542072812}
   countText: {fileID: 2096578626762265955}
+  shadowColor: {r: 1, g: 1, b: 1, a: 0.39215687}
 --- !u!1 &1102147593542072594
 GameObject:
   m_ObjectHideFlags: 0

@@ -265,6 +265,7 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: backpack
   propertyType: 2
+  keepShadowWhileDragging: 1
   fallbackSlotContainer: {fileID: 0}
   slotPrefab: {fileID: 7930127205022493825, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
     type: 3}
@@ -411,6 +412,11 @@ PrefabInstance:
       propertyPath: fallbackSlotContainer
       value: 
       objectReference: {fileID: 40684611}
+    - target: {fileID: 7930127205022493830, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
+        type: 3}
+      propertyPath: keepShadowWhileDragging
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3, type: 3}
 --- !u!224 &69040979 stripped
@@ -711,6 +717,7 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: potions
   propertyType: 1
+  keepShadowWhileDragging: 1
   fallbackSlotContainer: {fileID: 40684611}
   slotPrefab: {fileID: 7930127205022493825, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
     type: 3}
@@ -1384,6 +1391,11 @@ PrefabInstance:
       propertyPath: fallbackSlotContainer
       value: 
       objectReference: {fileID: 40684611}
+    - target: {fileID: 7930127205022493830, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
+        type: 3}
+      propertyPath: keepShadowWhileDragging
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3, type: 3}
 --- !u!224 &1643765831 stripped
@@ -1547,6 +1559,11 @@ PrefabInstance:
       propertyPath: fallbackSlotContainer
       value: 
       objectReference: {fileID: 40684611}
+    - target: {fileID: 7930127205022493830, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
+        type: 3}
+      propertyPath: keepShadowWhileDragging
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3, type: 3}
 --- !u!224 &1792054206 stripped
