@@ -340,6 +340,11 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             draggableUI.draggableModel = model;
             draggableUI.onModelUpdate?.Invoke(model, false);
         }
+        if (draggableUI == draggedItem && shadowClone != null)
+        {
+            shadowClone.draggableModel = model;
+            shadowClone.onModelUpdate?.Invoke(model, true);
+        }
     }
     private DraggableUI SpawnDraggableUI(Slot slot, bool link)
     {
