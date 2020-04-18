@@ -16,10 +16,6 @@ public class SlotsHighlighter : MonoBehaviour
 
     public void OnDragStarted(PointerEventData eventData, DraggableUI draggableUI)
     {
-        if (!(draggableUI.draggableModel is Item))
-        {
-            return;
-        }
         ForEachSlot((slot, display) =>
         {
             if (slot == draggableUI.slot)
@@ -36,10 +32,6 @@ public class SlotsHighlighter : MonoBehaviour
     }
     public void OnDragMoved(PointerEventData eventData, DropTransaction transaction)
     {
-        if (!(transaction.draggableUI.draggableModel is Item))
-        {
-            return;
-        }
         bool dropSlotAccepts = DragManager.SlotAcceptsValue(transaction.dropSlot, transaction.draggableUI.draggableModel);
         ForEachSlot((slot, display) =>
         {
@@ -85,10 +77,6 @@ public class SlotsHighlighter : MonoBehaviour
     }
     public void OnDragCancelled(DraggableUI draggableUI)
     {
-        if (!(draggableUI.draggableModel is Item))
-        {
-            return;
-        }
         ForEachSlot((slot, display) =>
         {
             display.backgroundImage.color = display.backgroundColors.passive;

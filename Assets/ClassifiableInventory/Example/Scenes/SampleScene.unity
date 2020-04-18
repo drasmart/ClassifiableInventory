@@ -994,6 +994,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 128828534}
     m_Modifications:
+    - target: {fileID: 375251889152396837, guid: fc71817a50b0a774692aed6c07a76c82,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5943518474658243480, guid: fc71817a50b0a774692aed6c07a76c82,
         type: 3}
       propertyPath: classes.Array.size
@@ -1139,6 +1144,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Active Skill Slot
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144080500811546213, guid: fc71817a50b0a774692aed6c07a76c82,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc71817a50b0a774692aed6c07a76c82, type: 3}
@@ -1298,7 +1308,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1434239739}
+      - m_Target: {fileID: 0}
         m_MethodName: ReloadSkills
         m_Mode: 1
         m_Arguments:
@@ -1564,7 +1574,6 @@ GameObject:
   - component: {fileID: 1434239736}
   - component: {fileID: 1434239737}
   - component: {fileID: 1434239738}
-  - component: {fileID: 1434239739}
   m_Layer: 0
   m_Name: PlayerInventory
   m_TagString: Untagged
@@ -1691,20 +1700,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventory: {fileID: 1434239737}
   itemType: {fileID: 11400000, guid: 787c56d04f704924abbbf3e867d94864, type: 2}
---- !u!114 &1434239739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1434239735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a67f20cae23f434a85cc830e720860b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerInventory: {fileID: 1434239737}
-  skills: []
 --- !u!224 &1623426275 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5943518474658243484, guid: fc71817a50b0a774692aed6c07a76c82,
@@ -1898,6 +1893,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 128828534}
     m_Modifications:
+    - target: {fileID: 375251889152396837, guid: fc71817a50b0a774692aed6c07a76c82,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5943518474658243480, guid: fc71817a50b0a774692aed6c07a76c82,
         type: 3}
       propertyPath: classes.Array.size
@@ -2043,6 +2043,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Passive Skill Slot
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144080500811546213, guid: fc71817a50b0a774692aed6c07a76c82,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc71817a50b0a774692aed6c07a76c82, type: 3}
@@ -2528,9 +2533,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11a522cd470839479ddf7e17928d401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetScript: {fileID: 1434239739}
-  property: skills
-  propertyType: 1
+  targetScript: {fileID: 1434239737}
+  property: knownSkills
+  propertyType: 2
   keepShadowWhileDragging: 1
   fallbackSlotContainer: {fileID: 0}
   slotPrefab: {fileID: 5943518474658243485, guid: fc71817a50b0a774692aed6c07a76c82,
@@ -2630,6 +2635,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 128828534}
     m_Modifications:
+    - target: {fileID: 375251889152396837, guid: fc71817a50b0a774692aed6c07a76c82,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5943518474658243480, guid: fc71817a50b0a774692aed6c07a76c82,
         type: 3}
       propertyPath: classes.Array.size
@@ -2775,6 +2785,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Aura Skill Slot
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144080500811546213, guid: fc71817a50b0a774692aed6c07a76c82,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc71817a50b0a774692aed6c07a76c82, type: 3}
