@@ -22,6 +22,10 @@ public class Slot : BaseSlot
             return model as DraggableModel;
         }
         set {
+            if (isReadOnly)
+            {
+                return;
+            }
             GetAccess(targetScript, property, propertyType,
                 (field, dataType) => field.SetValue(targetScript, value),
                 (list, dataType) => { if (index < list.Count) { list[index] = value; }; },

@@ -21,18 +21,25 @@ public class SlotsHighlighter : MonoBehaviour
             if (slot == draggableUI.slot)
             {
                 display.backgroundImage.color = display.backgroundColors.source;
-            } else if (!DragManager.SlotAcceptsValue(slot, draggableUI.draggableModel))
+                return;
+            }
+            if (!DragManager.SlotAcceptsValue(slot, draggableUI.draggableModel))
             {
                 display.nonAcceptingOverlay.SetActive(true);
-            } else
-            {
-                display.backgroundImage.color = display.backgroundColors.normal;
+                return;
             }
+            if (slot.isReadOnly && draggableUI.slot?.isReadOnly == true)
+            {
+                display.nonAcceptingOverlay.SetActive(true);
+                return;
+            }
+            display.backgroundImage.color = display.backgroundColors.normal;
         });
     }
     public void OnDragMoved(PointerEventData eventData, DropTransaction transaction)
     {
         bool dropSlotAccepts = DragManager.SlotAcceptsValue(transaction.dropSlot, transaction.draggableUI.draggableModel);
+        bool fromReadOnly = (transaction.draggableUI.slot?.isReadOnly == true);
         ForEachSlot((slot, display) =>
         {
             var colors = display.backgroundColors;
@@ -41,6 +48,10 @@ public class SlotsHighlighter : MonoBehaviour
                 if (slot == transaction.draggableUI.slot)
                 {
                     display.backgroundImage.color = (slot == transaction.fallbackSlot) ? colors.swapSource : colors.source;
+                }
+                else if (slot.isReadOnly && fromReadOnly)
+                {
+                    return;
                 }
                 else if (slot == transaction.dropSlot)
                 {
@@ -54,7 +65,11 @@ public class SlotsHighlighter : MonoBehaviour
             {
                 if (slot == transaction.draggableUI.slot)
                 {
-                    display.backgroundImage.color = (slot == transaction.dropSlot || transaction.dropSlot == null || !dropSlotAccepts) ? colors.source : colors.invalidSource;
+                    display.backgroundImage.color = (fromReadOnly || slot == transaction.dropSlot || transaction.dropSlot == null || !dropSlotAccepts) ? colors.source : colors.invalidSource;
+                } 
+                else if (slot.isReadOnly && fromReadOnly)
+                {
+                    return;
                 }
                 else if (slot == transaction.dropSlot)
                 {

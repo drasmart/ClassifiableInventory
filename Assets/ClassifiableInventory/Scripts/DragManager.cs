@@ -146,9 +146,13 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
         if (dropTransaction.valid)
         {
-            DoDrop(dropTransaction);
+            var slotsToUpdate = DoDrop(dropTransaction);
             ClearDragData();
             onDragDropped?.Invoke(eventData, dropTransaction);
+            foreach(var nextSlot in slotsToUpdate)
+            {
+                UpdateSlot(nextSlot, nextSlot.enabled && nextSlot.gameObject.activeInHierarchy);
+            }
             return;
         }
         Attach(draggedItem, draggedItem.slot, false);
@@ -229,24 +233,43 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                 return new DropTransaction(draggedItem, dropCandidateSlot, null, false);
             } while (false);
         }
+        if (draggedItem.slot?.isReadOnly == true && dropCandidateSlot.isReadOnly)
+        {
+            return new DropTransaction(draggedItem, dropCandidateSlot, dropFallbackSlot, false);
+        }
         var result = new DropTransaction(draggedItem, dropCandidateSlot, dropFallbackSlot, true);
         validationEvent?.Invoke(result);
         return result;
     }
-    private void DoDrop(DropTransaction transaction)
+    private IEnumerable<Slot> DoDrop(DropTransaction transaction)
     {
         var oldSlot = transaction.draggableUI.slot;
         var oldDraggable = transaction.dropSlot.draggableUI;
         Attach(transaction.draggableUI, transaction.dropSlot, true);
-        transaction.dropSlot.draggableModel = transaction.draggableUI.draggableModel;
-        if (oldSlot)
-        {
-            oldSlot.draggableModel = null;
-        }
+        var slotsToUpdate = new List<Slot>();
+        TryUpdateModel(transaction.dropSlot, transaction.draggableUI.draggableModel, slotsToUpdate);
+        TryUpdateModel(oldSlot, null, slotsToUpdate);
         if (oldDraggable != null && transaction.fallbackSlot != null)
         {
             Attach(oldDraggable, transaction.fallbackSlot, true);
-            transaction.fallbackSlot.draggableModel = oldDraggable.draggableModel;
+            TryUpdateModel(transaction.fallbackSlot, oldDraggable.draggableModel, slotsToUpdate);
+        }
+        return slotsToUpdate;
+    }
+
+    private void TryUpdateModel(Slot slot, DraggableModel model, IList<Slot> failList)
+    {
+        if (!slot)
+        {
+            return;
+        }
+        if (!slot.isReadOnly)
+        {
+            slot.draggableModel = model;
+        }
+        else
+        {
+            failList.Add(slot);
         }
     }
 

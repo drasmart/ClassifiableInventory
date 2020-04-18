@@ -265,8 +265,9 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: backpack
   propertyType: 2
-  keepShadowWhileDragging: 1
   fallbackSlotContainer: {fileID: 0}
+  keepShadowWhileDragging: 1
+  isReadOnly: 0
   slotPrefab: {fileID: 7930127205022493825, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
     type: 3}
 --- !u!1001 &69040978
@@ -809,8 +810,9 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: potions
   propertyType: 1
-  keepShadowWhileDragging: 1
   fallbackSlotContainer: {fileID: 40684611}
+  keepShadowWhileDragging: 1
+  isReadOnly: 0
   slotPrefab: {fileID: 7930127205022493825, guid: 04cbf5fd4a88bea41b412ae8c43bf7b3,
     type: 3}
 --- !u!114 &467395538
@@ -2536,8 +2538,9 @@ MonoBehaviour:
   targetScript: {fileID: 1434239737}
   property: knownSkills
   propertyType: 2
-  keepShadowWhileDragging: 1
   fallbackSlotContainer: {fileID: 0}
+  keepShadowWhileDragging: 1
+  isReadOnly: 1
   slotPrefab: {fileID: 5943518474658243485, guid: fc71817a50b0a774692aed6c07a76c82,
     type: 3}
 --- !u!114 &2049956110
