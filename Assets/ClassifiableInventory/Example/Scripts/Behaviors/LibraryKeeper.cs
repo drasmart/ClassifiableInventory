@@ -14,7 +14,6 @@ public class LibraryKeeper : MonoBehaviour
 
     public void ReloadSkills()
     {
-        Debug.Log("Reloading...");
         InstallSkills();
         playerInventory.onDataUpdate?.Invoke();
     }

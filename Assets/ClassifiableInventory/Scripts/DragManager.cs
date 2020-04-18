@@ -380,7 +380,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             return false;
         }
-        return PrefabAcceptsClasses(slot.gameObject, model.classes) || !slot.CanAcceptValue(model.GetType());
+        return PrefabAcceptsClasses(slot.gameObject, model.classes) && slot.CanAcceptValue(model.GetType());
     }
     private static bool PrefabAcceptsClasses(GameObject prefab, Classifiable.TypeAsset[] classes)
     {
