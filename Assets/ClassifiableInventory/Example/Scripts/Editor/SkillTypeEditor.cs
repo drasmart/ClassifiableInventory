@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(ItemType))]
+[CustomEditor(typeof(SkillType))]
 [CanEditMultipleObjects]
-public class ItemTypeEditor : SpritedAssetEditor<ItemType>
+public class SkillTypeEditor : SpritedAssetEditor<SkillType>
 {
 }

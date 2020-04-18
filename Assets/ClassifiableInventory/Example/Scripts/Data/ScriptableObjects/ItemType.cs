@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "NewItemType", menuName = "Inventory/Item Type")]
-public class ItemType : ScriptableObject
+[CreateAssetMenu(menuName = "Inventory/Item Type")]
+public class ItemType : ScriptableObject, SpritedAsset
 {
     public ItemSlotTypeAsset[] slotTypes;
     public Sprite sprite;
@@ -12,4 +12,6 @@ public class ItemType : ScriptableObject
     public int durability;
     [Min(0)]
     public int stackSize;
+
+    public Sprite previewSprite => sprite;
 }
