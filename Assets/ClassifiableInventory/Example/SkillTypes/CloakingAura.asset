@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf569d22434a86f44a6af89b948a4181, type: 3}
   m_Name: CloakingAura
   m_EditorClassIdentifier: 
-  slotTypes: []
+  slotTypes:
+  - {fileID: 11400000, guid: 2ab0d242a6897cd41bcc7efe958e5877, type: 2}
   sprite: {fileID: 1496937322057176999, guid: 966fa9abbba081e4ba97c2b9fc03c6b0, type: 3}
   baseManaCost: 0

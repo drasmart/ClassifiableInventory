@@ -254,7 +254,11 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void Attach(DraggableUI draggable, Slot slot, bool link)
     {
         var dragTransform = draggable.transform as RectTransform;
-        var slotTransform = slot.draggableContainer ?? (slot.transform as RectTransform);
+        var slotTransform = slot.draggableContainer;
+        if (slotTransform == null)
+        {
+            slotTransform = slot.transform as RectTransform;
+        }
         dragTransform.SetParent(slotTransform, true);
         dragTransform.localScale = Vector3.one;
         var s = slotTransform.rect.size;
