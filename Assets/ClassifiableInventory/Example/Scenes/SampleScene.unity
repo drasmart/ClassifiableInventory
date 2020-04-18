@@ -467,12 +467,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1958998944}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 32, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &84377653
 MonoBehaviour:
@@ -667,6 +667,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 321217118}
   m_CullTransparentMesh: 0
+--- !u!114 &350422890 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5943518474658243481, guid: fc71817a50b0a774692aed6c07a76c82,
+    type: 3}
+  m_PrefabInstance: {fileID: 573625967}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db355245a01f1654ba7d8e0377349718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &467395531
 GameObject:
   m_ObjectHideFlags: 0
@@ -1136,7 +1148,7 @@ GameObject:
   - component: {fileID: 683303742}
   - component: {fileID: 683303743}
   m_Layer: 5
-  m_Name: AspectFit Panel + DragManager
+  m_Name: AspectFit Panel + DragManager + StackController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1262,6 +1274,17 @@ MonoBehaviour:
       - m_Target: {fileID: 1958998948}
         m_MethodName: OnDragDropped
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1434239739}
+        m_MethodName: ReloadSkills
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1525,6 +1548,7 @@ GameObject:
   - component: {fileID: 1434239736}
   - component: {fileID: 1434239737}
   - component: {fileID: 1434239738}
+  - component: {fileID: 1434239739}
   m_Layer: 0
   m_Name: PlayerInventory
   m_TagString: Untagged
@@ -1651,12 +1675,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventory: {fileID: 1434239737}
   itemType: {fileID: 11400000, guid: 787c56d04f704924abbbf3e867d94864, type: 2}
+--- !u!114 &1434239739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1434239735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a67f20cae23f434a85cc830e720860b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInventory: {fileID: 1434239737}
+  skills: []
 --- !u!224 &1623426275 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5943518474658243484, guid: fc71817a50b0a774692aed6c07a76c82,
     type: 3}
   m_PrefabInstance: {fileID: 5943518476256307071}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1623426278 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5943518474658243481, guid: fc71817a50b0a774692aed6c07a76c82,
+    type: 3}
+  m_PrefabInstance: {fileID: 5943518476256307071}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db355245a01f1654ba7d8e0377349718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1643765830
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1841,7 +1891,7 @@ PrefabInstance:
         type: 3}
       propertyPath: classes.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: c965913183949164884616efd44cc7ce,
+      objectReference: {fileID: 11400000, guid: 85b9ffe68ba4fea479351ea80178f42c,
         type: 2}
     - target: {fileID: 5943518474658243481, guid: fc71817a50b0a774692aed6c07a76c82,
         type: 3}
@@ -1971,6 +2021,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1772528742}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1781178813 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5943518474658243481, guid: fc71817a50b0a774692aed6c07a76c82,
+    type: 3}
+  m_PrefabInstance: {fileID: 1772528742}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db355245a01f1654ba7d8e0377349718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1792054205
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2217,7 +2279,7 @@ GameObject:
   - component: {fileID: 1958998945}
   - component: {fileID: 1958998948}
   m_Layer: 5
-  m_Name: Inventory Panel
+  m_Name: Inventory Panel + Slots Highlighter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2237,8 +2299,8 @@ RectTransform:
   - {fileID: 1888026165}
   - {fileID: 40684605}
   - {fileID: 128828534}
-  - {fileID: 84377652}
   - {fileID: 2049956108}
+  - {fileID: 84377652}
   m_Father: {fileID: 683303738}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2265,6 +2327,10 @@ MonoBehaviour:
   - {fileID: 1792054207}
   - {fileID: 69040980}
   - {fileID: 467395537}
+  - {fileID: 2049956109}
+  - {fileID: 1623426278}
+  - {fileID: 1781178813}
+  - {fileID: 350422890}
 --- !u!114 &1958998946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2413,7 +2479,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1958998944}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2432,9 +2498,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11a522cd470839479ddf7e17928d401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetScript: {fileID: 1434239737}
-  property: knownSkills
-  propertyType: 2
+  targetScript: {fileID: 1434239739}
+  property: skills
+  propertyType: 1
   keepShadowWhileDragging: 1
   fallbackSlotContainer: {fileID: 0}
   slotPrefab: {fileID: 5943518474658243485, guid: fc71817a50b0a774692aed6c07a76c82,
@@ -2543,7 +2609,7 @@ PrefabInstance:
         type: 3}
       propertyPath: classes.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: c965913183949164884616efd44cc7ce,
+      objectReference: {fileID: 11400000, guid: 2ab0d242a6897cd41bcc7efe958e5877,
         type: 2}
     - target: {fileID: 5943518474658243481, guid: fc71817a50b0a774692aed6c07a76c82,
         type: 3}
