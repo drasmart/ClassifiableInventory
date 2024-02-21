@@ -11598,7 +11598,7 @@ TextureImporter:
       213: -5747304296189748593
     second: magicicons_3864
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -11615,9 +11615,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -11626,9 +11629,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -11649,10 +11652,15 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -11664,6 +11672,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -11676,6 +11685,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -11688,6 +11698,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -12963,9 +12974,69 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      magicicons_0: -3360605755835578476
+      magicicons_1: -1636742009938608792
+      magicicons_10: -1719544449181028933
+      magicicons_11: 3499144181262065939
+      magicicons_12: 5009905267504198013
+      magicicons_13: -5512987352564377527
+      magicicons_14: -5251144013649010628
+      magicicons_15: 8151745539084921268
+      magicicons_16: 9038722370204788208
+      magicicons_17: -6307192972065056902
+      magicicons_18: 1496937322057176999
+      magicicons_19: 8149886449850402509
+      magicicons_2: 4894503297020535576
+      magicicons_20: -6109863103726367109
+      magicicons_21: -8919751398972608121
+      magicicons_22: 2994578985466089648
+      magicicons_23: 3479635591432090396
+      magicicons_24: 7600498205236103646
+      magicicons_25: -2447593928078827461
+      magicicons_26: 9116348137561911171
+      magicicons_27: 7249195885237473059
+      magicicons_28: 8931228040977909310
+      magicicons_29: 2376849945498428074
+      magicicons_3: 452449923478228066
+      magicicons_30: -3930251490375797931
+      magicicons_31: -5304900306343900050
+      magicicons_32: 8366492930270143727
+      magicicons_33: -3066202531453528308
+      magicicons_34: 6641047876069237051
+      magicicons_35: 4618418508585986175
+      magicicons_36: 4925213837470441700
+      magicicons_37: 276459785961795117
+      magicicons_38: -4147597165937273742
+      magicicons_39: -6331279504614907181
+      magicicons_4: 1172337225970943958
+      magicicons_40: -2762706271347813324
+      magicicons_41: -6440050250927135102
+      magicicons_42: -4790123843729745444
+      magicicons_43: 4686595512685524971
+      magicicons_44: 6013976621570384035
+      magicicons_45: 507559374467436101
+      magicicons_46: 9129171880482719815
+      magicicons_47: -8588249913654777830
+      magicicons_48: 803276968800783991
+      magicicons_49: -6882018062312052723
+      magicicons_5: 2268046171142045498
+      magicicons_50: -7686078745732729966
+      magicicons_51: -1148518790833164990
+      magicicons_52: -2444194811536289366
+      magicicons_53: 921056162422908317
+      magicicons_54: -121267649305958680
+      magicicons_55: 7736522042236364584
+      magicicons_56: -5317365151719324503
+      magicicons_57: -1198428837491895045
+      magicicons_58: 7692235260354156442
+      magicicons_59: 8880227077277814580
+      magicicons_6: 5117178054174178499
+      magicicons_7: -799456379296477578
+      magicicons_8: -1931264879148296782
+      magicicons_9: -5291696226865347966
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

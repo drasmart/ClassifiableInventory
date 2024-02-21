@@ -78,7 +78,7 @@ TextureImporter:
       213: 9013594451952189639
     second: platemail_boots
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -95,9 +95,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -106,9 +109,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -129,10 +132,15 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -144,6 +152,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -156,6 +165,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -168,6 +178,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -687,9 +698,33 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      chainmail_boots: -312173433268445198
+      chainmail_gloves: -4214081545311973619
+      chainmail_helmet: 7546659845304183437
+      chainmail_pants: 3576992640591830667
+      chainmail_shirt: 4069267563741766016
+      cotton_pants: 8799792156863395267
+      green_robe: -8772121908596508239
+      hardened_leather_boots: 4421011109958150473
+      hardened_leather_gloves: -5066207578245859049
+      hardened_leather_helmet: 2450509959767089554
+      hardened_leather_pants: 6834255485201763926
+      hardened_leather_robe: -6690072607757409991
+      light_leather_boots: 699628181185557196
+      light_leather_bracers: -8069833818379120915
+      light_leather_helmet: 4245921647786262323
+      light_leather_pants: -7884570143472510734
+      light_leather_robe: -8869905478719167701
+      platemail_boots: 9013594451952189639
+      platemail_gloves: 3215174598790288886
+      platemail_helmet: 8372541301182709270
+      platemail_pants: 7596215250128356099
+      platemail_shirt: -6564446018456713779
+      wooden_boots: -4199603999977969845
+      wooden_gloves: -75040396921890675
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
