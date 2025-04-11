@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+
+#nullable enable
 
 public class ColorTypeTest : MonoBehaviour
 {
-    public List<ColorTypeAsset> colors = new List<ColorTypeAsset>();
-    public List<ColorTypeFilterAsset> filters = new List<ColorTypeFilterAsset>();
+    public List<ColorTypeAsset> colors = new();
+    public List<ColorTypeFilterAsset> filters = new();
 
     private void Start()
     {
@@ -14,10 +15,6 @@ public class ColorTypeTest : MonoBehaviour
 
     private void TestColors()
     {
-        if (colors == null)
-        {
-            return;
-        }
         foreach(var c1 in colors)
         {
             string msg = "";

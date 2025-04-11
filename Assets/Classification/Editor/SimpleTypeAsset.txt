@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Classification;
+
+#nullable enable
 
 [CreateAssetMenu(fileName = "SimpleTypeAsset.asset", menuName = "Classification/Simple Type")]
 public class SimpleTypeAsset : TypeAsset<SimpleTypeAsset>

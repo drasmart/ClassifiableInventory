@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#nullable enable
 
 namespace Classification
 {
@@ -14,18 +15,13 @@ namespace Classification
         }
 
         [SerializeField]
-        private List<TypeAsset> classes = new List<TypeAsset>();
+        private List<TypeAsset> classes = new();
 
-        public IEnumerable<TypeAsset> AllClasses {
-            get {
-                return classes;
-            }
-        }
+        public IEnumerable<TypeAsset> AllClasses => classes;
 
-        public T GetClass<T>() where T: TypeAsset
+        public T? GetClass<T>() where T: TypeAsset
         {
-            var existing = Find<T>();
-            return existing?.Item2;
+            return Find<T>()?.Item2;
         }
 
         public void SetClass<T>(T newClass) where T : TypeAsset
@@ -49,17 +45,11 @@ namespace Classification
             }
         }
 
-        private Tuple<int, T> Find<T>() where T: TypeAsset
+        private Tuple<int, T>? Find<T>() where T: TypeAsset
         {
-            if (classes == null)
-            {
-                classes = new List<TypeAsset>();
-                return null;
-            }
             for (int i = 0; i < classes.Count; i++)
             {
-                T found = classes[i] as T;
-                if(found != null)
+                if(classes[i] is T found)
                 {
                     return new Tuple<int, T>(i, found);
                 }

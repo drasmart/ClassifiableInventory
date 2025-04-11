@@ -1,21 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System.IO;
+
+#nullable enable
 
 namespace Classification
 {
     public class AssetTypeGenerator : Editor
     {
-        private static string templatesPath { get { return Application.dataPath + "/Classification/Editor/"; } }
+        private static string TemplatesPath => Application.dataPath + "/Classification/Editor/";
 
         [MenuItem("Assets/Create/Classification/New TypeAsset Script", false, 0)]
         public static void CreateStory()
         {
-            string startPath = null;
-            var obj = Selection.activeObject;
-            if (obj != null)
+            string? startPath = null;
+            if (Selection.activeObject is var obj && obj)
             {
                 startPath = AssetDatabase.GetAssetPath(obj.GetInstanceID());
             }
@@ -28,7 +27,7 @@ namespace Classification
 
             string mainFile = path.EndsWith("TypeAsset.cs") ? path : path.Replace(".cs", "TypeAsset.cs");
             string filterFile = path.Replace("TypeAsset.cs", "TypeFilterAsset.cs");
-            string className = System.IO.Path.GetFileNameWithoutExtension(mainFile).Replace("TypeAsset", "");
+            string className = Path.GetFileNameWithoutExtension(mainFile).Replace("TypeAsset", "");
 
             Clone("SimpleTypeAsset.txt", className, mainFile);
             Clone("SimpleTypeFilterAsset.txt", className, filterFile);
@@ -40,7 +39,7 @@ namespace Classification
 
         private static void Clone(string srcFileName, string dstTypeName, string dstPath)
         {
-            string templatePath = templatesPath + srcFileName;
+            string templatePath = TemplatesPath + srcFileName;
 
             // So copy all the template lines, replace the template names, and write them to the new file.
             string[] lines = File.ReadAllLines(templatePath);

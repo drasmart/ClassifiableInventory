@@ -1,33 +1,32 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#nullable enable
 
 namespace Classification
 {
     [Serializable]
-    public abstract class TypeAsset<T> : Classifiable.TypeAsset where T: TypeAsset<T>
+    public abstract class TypeAsset<TAsset> : Classifiable.TypeAsset 
+        where TAsset: TypeAsset<TAsset>
     {
-        public List<T> supertypes = new List<T>();
+        [SerializeField]
+        private List<TAsset> supertypes = new();
 
-        public bool IsSubtypeOf(TypeAsset<T> other)
+        public bool IsSubtypeOf(TypeAsset<TAsset> other)
         {
-            if (other == null || this == other)
+            if (!other || this == other)
             {
                 return true;
             }
-            var tested = new HashSet<TypeAsset<T>>();
-            var toTest = new LinkedList<TypeAsset<T>>();
+            var tested = new HashSet<TypeAsset<TAsset>>();
+            var toTest = new LinkedList<TypeAsset<TAsset>>();
             toTest.AddFirst(this);
             tested.Add(this);
             while (toTest.Count > 0)
             {
                 var next = toTest.First.Value;
                 toTest.RemoveFirst();
-                if(next.supertypes == null)
-                {
-                    continue;
-                }
                 foreach(var supertype in next.supertypes)
                 {
                     if(supertype == other)
@@ -45,14 +44,14 @@ namespace Classification
             return false;
         }
 
-        public bool IsSupertypeOf(TypeAsset<T> other)
+        public bool IsSupertypeOf(TypeAsset<TAsset> other)
         {
-            return other != null && other.IsSubtypeOf(this);
+            return other && other.IsSubtypeOf(this);
         }
 
         public sealed override bool Filter(Classifiable.TypeAsset typeAsset)
         {
-            return IsSupertypeOf(typeAsset as T);
+            return typeAsset is TAsset other && IsSupertypeOf(other);
         }
     }
 }

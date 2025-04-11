@@ -1,40 +1,35 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+
+#nullable enable
 
 namespace Classification
 {
     [Serializable]
-    public class TypeFilterAsset<T, F> : Classifiable.TypeFilter where F : TypeFilterAsset<T, F> where T : TypeAsset<T>
+    public class TypeFilterAsset<TAsset, TFilterAsset> : Classifiable.TypeFilter
+        where TAsset : TypeAsset<TAsset>
+        where TFilterAsset : TypeFilterAsset<TAsset, TFilterAsset>
     {
-        public bool isBlacklist = false;
-        public bool requireAll = false;
+        public bool isBlacklist;
+        public bool requireAll;
 
-        public List<T> requiredTypes = new List<T>();
-        public List<F> requiredFilters = new List<F>();
+        public List<TAsset> requiredTypes = new();
+        public List<TFilterAsset> requiredFilters = new();
 
         public sealed override bool Filter(Classifiable.TypeAsset typeAsset)
         {
-            T other = typeAsset as T;
-            if (other == null)
+            if (typeAsset is TAsset other && other)
             {
-                return false;
+                bool? result = null;
+                if ((result = CheckFilters(other, requiredTypes)) is not null) { return result.Value; }
+                if ((result = CheckFilters(other, requiredFilters)) is not null) { return result.Value; }
+                return isBlacklist ^ requireAll;
             }
-            bool? result = null;
-            result = CheckFilters(other, requiredTypes);
-            if (result != null) { return result.Value; }
-            result = CheckFilters(other, requiredFilters);
-            if (result != null) { return result.Value; }
-            return isBlacklist ^ requireAll;
+            return false;
         }
 
-        private bool? CheckFilters<C>(TypeAsset<T> typeAsset, List<C> requirements) where C: Classifiable.TypeFilter
+        private bool? CheckFilters<TC>(TypeAsset<TAsset> typeAsset, List<TC> requirements) where TC: Classifiable.TypeFilter
         {
-            if (requirements == null)
-            {
-                return null;
-            }
             foreach (var nextFilter in requirements)
             {
                 var passed = nextFilter.Filter(typeAsset);
