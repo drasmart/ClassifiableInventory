@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Classification;
+
+#nullable enable
 
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(Classifiable))]
 public abstract class BaseSlot : FallbackSlotContainer
 {
-    public MonoBehaviour targetScript;
-    public string property;
+    public MonoBehaviour? targetScript;
+    public string? property;
     public SlotPropertyType propertyType;
 
-    public FallbackSlotContainer fallbackSlotContainer;
+    public FallbackSlotContainer? fallbackSlotContainer;
     public bool keepShadowWhileDragging;
     public bool isReadOnly;
 
@@ -21,11 +22,18 @@ public abstract class BaseSlot : FallbackSlotContainer
     public delegate void ArrayHandler(Array array, Type dataType);
     public delegate void FailHandler();
 
-    public static void GetAccess(MonoBehaviour target, string property, SlotPropertyType propertyType, FieldHandler fieldHandler, ListHandler listHandler, ArrayHandler arrayHandler, FailHandler failHandler)
+    public static void GetAccess(
+        MonoBehaviour? target, 
+        string? property, 
+        SlotPropertyType propertyType,
+        FieldHandler? fieldHandler, 
+        ListHandler? listHandler,
+        ArrayHandler? arrayHandler, 
+        FailHandler? failHandler)
     {
         do
         {
-            if (target == null || string.IsNullOrEmpty(property))
+            if (!target || string.IsNullOrEmpty(property))
             {
                 break;
             }
@@ -36,7 +44,7 @@ public abstract class BaseSlot : FallbackSlotContainer
                 break;
             }
             var fieldType = field.FieldType;
-            var q = typeof(DraggableModel);
+            var q = typeof(IDraggableModel);
             switch (propertyType)
             {
                 case SlotPropertyType.Plain:
@@ -44,10 +52,15 @@ public abstract class BaseSlot : FallbackSlotContainer
                     return;
                 case SlotPropertyType.Array:
                     {
-                        var elementType = fieldType.GetElementType();
-                        if (fieldType.IsArray && q.IsAssignableFrom(elementType))
+                        if (fieldType.GetElementType() is { } elementType 
+                            && fieldType.IsArray
+                            && q.IsAssignableFrom(elementType))
                         {
-                            arrayHandler?.Invoke(field.GetValue(target) as Array, elementType);
+                            if (field.GetValue(target) is Array arr)
+                            {
+                                arrayHandler?.Invoke(arr, elementType);
+                            }
+
                             return;
                         }
                     }
@@ -61,9 +74,9 @@ public abstract class BaseSlot : FallbackSlotContainer
                             break;
                         }
                         var elementType = genericArgs[0];
-                        if (q.IsAssignableFrom(elementType))
+                        if (field.GetValue(target) is IList list && q.IsAssignableFrom(elementType))
                         {
-                            listHandler?.Invoke(field.GetValue(target) as IList, elementType);
+                            listHandler?.Invoke(list, elementType);
                             return;
                         }
                     }
@@ -75,12 +88,12 @@ public abstract class BaseSlot : FallbackSlotContainer
 
     public virtual bool CanAcceptValue(Type modelType)
     {
-        Type storageType = null;
+        Type? storageType = null;
         GetAccess(targetScript, property, propertyType,
-            (field, dataType) => storageType = dataType,
-            (list, dataType) => storageType = dataType,
-            (array, dataType) => storageType = dataType,
+            (_, dataType) => storageType = dataType,
+            (_, dataType) => storageType = dataType,
+            (_, dataType) => storageType = dataType,
             null);
-        return storageType != null && storageType.IsAssignableFrom(modelType);
+        return storageType?.IsAssignableFrom(modelType) ?? false;
     }
 }

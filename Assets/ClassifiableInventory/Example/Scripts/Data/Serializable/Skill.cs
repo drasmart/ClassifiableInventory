@@ -1,10 +1,8 @@
 ﻿using Classification;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Skill : DraggableModel
+public class Skill : IDraggableModel
 {
     public SkillType skillType;
     [Min(0)]
@@ -12,7 +10,7 @@ public class Skill : DraggableModel
 
     public bool IsNull => skillType == null;
 
-    public Classifiable.TypeAsset[] classes {
+    public Classifiable.TypeAsset[] Classes {
         get {
             var slots = skillType?.slotTypes;
             if (slots == null)

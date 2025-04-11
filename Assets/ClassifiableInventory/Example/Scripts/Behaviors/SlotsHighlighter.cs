@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
@@ -23,7 +21,7 @@ public class SlotsHighlighter : MonoBehaviour
                 display.backgroundImage.color = display.backgroundColors.source;
                 return;
             }
-            if (!DragManager.SlotAcceptsValue(slot, draggableUI.draggableModel))
+            if (!DragManager.SlotAcceptsValue(slot, draggableUI.DraggableModel))
             {
                 display.nonAcceptingOverlay.SetActive(true);
                 return;
@@ -38,40 +36,40 @@ public class SlotsHighlighter : MonoBehaviour
     }
     public void OnDragMoved(PointerEventData eventData, DropTransaction transaction)
     {
-        bool dropSlotAccepts = DragManager.SlotAcceptsValue(transaction.dropSlot, transaction.draggableUI.draggableModel);
-        bool fromReadOnly = (transaction.draggableUI.slot?.isReadOnly == true);
+        bool dropSlotAccepts = DragManager.SlotAcceptsValue(transaction.DropSlot, transaction.DraggableUI.DraggableModel);
+        bool fromReadOnly = (transaction.DraggableUI.slot?.isReadOnly == true);
         ForEachSlot((slot, display) =>
         {
             var colors = display.backgroundColors;
-            if (transaction.valid)
+            if (transaction.Valid)
             {
-                if (slot == transaction.draggableUI.slot)
+                if (slot == transaction.DraggableUI.slot)
                 {
-                    display.backgroundImage.color = (slot == transaction.fallbackSlot) ? colors.swapSource : colors.source;
+                    display.backgroundImage.color = (slot == transaction.FallbackSlot) ? colors.swapSource : colors.source;
                 }
                 else if (slot.isReadOnly && fromReadOnly)
                 {
                     return;
                 }
-                else if (slot == transaction.dropSlot)
+                else if (slot == transaction.DropSlot)
                 {
-                    display.backgroundImage.color = (slot.draggableModel == null || slot.draggableModel.IsNull) ? colors.dropDestination : colors.swapDestination;
+                    display.backgroundImage.color = (slot.DraggableModel == null || slot.DraggableModel.IsNull) ? colors.dropDestination : colors.swapDestination;
                 }
                 else
                 {
-                    display.backgroundImage.color = (slot == transaction.fallbackSlot) ? colors.swapFallback : colors.normal;
+                    display.backgroundImage.color = (slot == transaction.FallbackSlot) ? colors.swapFallback : colors.normal;
                 }
             } else
             {
-                if (slot == transaction.draggableUI.slot)
+                if (slot == transaction.DraggableUI.slot)
                 {
-                    display.backgroundImage.color = (fromReadOnly || slot == transaction.dropSlot || transaction.dropSlot == null || !dropSlotAccepts) ? colors.source : colors.invalidSource;
+                    display.backgroundImage.color = (fromReadOnly || slot == transaction.DropSlot || transaction.DropSlot == null || !dropSlotAccepts) ? colors.source : colors.invalidSource;
                 } 
                 else if (slot.isReadOnly && fromReadOnly)
                 {
                     return;
                 }
-                else if (slot == transaction.dropSlot)
+                else if (slot == transaction.DropSlot)
                 {
                     display.backgroundImage.color = dropSlotAccepts ? colors.invalidDestination : colors.normal;
                 }
@@ -84,7 +82,7 @@ public class SlotsHighlighter : MonoBehaviour
     }
     public void OnDragDropped(PointerEventData eventData, DropTransaction transaction)
     {
-        OnDragCancelled(transaction.draggableUI);
+        OnDragCancelled(transaction.DraggableUI);
     }
     public void OnDragEnded(PointerEventData eventData, DraggableUI draggableUI)
     {

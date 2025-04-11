@@ -1,19 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using Classification;
+
+#nullable enable
 
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(Classifiable))]
 public class DraggableUI : MonoBehaviour
 {
-    public Slot slot;
-    public DraggableModel draggableModel;
+    public Slot? slot;
+    public IDraggableModel? DraggableModel;
     public bool isShadow;
 
-    public ModelUpdatedEvent onModelUpdate;
+    public ModelUpdatedEvent? onModelUpdate;
 
-    [System.Serializable] public class ModelUpdatedEvent : UnityEvent<DraggableModel, bool> { }
+    [System.Serializable] public class ModelUpdatedEvent : UnityEvent<IDraggableModel, bool> { }
 }

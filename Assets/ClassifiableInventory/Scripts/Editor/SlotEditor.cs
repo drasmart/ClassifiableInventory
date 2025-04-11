@@ -1,18 +1,19 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Classification;
 using System;
+using UnityEngine.Assertions;
+
+#nullable enable
 
 [CustomEditor(typeof(Slot))]
 [CanEditMultipleObjects]
 public class SlotEditor : BaseSlotEditor
 {
-    private SerializedProperty indexProp;
-    private SerializedProperty draggableContainerProp;
+    private SerializedProperty? indexProp;
+    private SerializedProperty? draggableContainerProp;
 
-    private SerializedProperty draggableUIProp;
+    private SerializedProperty? draggableUIProp;
 
     private int? newPropLength;
 
@@ -27,9 +28,10 @@ public class SlotEditor : BaseSlotEditor
 
     protected override void OnSlotInspection()
     {
+        Assert.IsNotNull(indexProp);
         if (newPropLength != null)
         {
-            indexProp.intValue = newPropLength.Value;
+            indexProp!.intValue = newPropLength.Value;
             newPropLength = null;
         }
 
@@ -47,25 +49,28 @@ public class SlotEditor : BaseSlotEditor
         ShowIndexPicker();
     }
 
-    protected override PropertyPickHandler PickListField(string name, IList list) => () =>
+    protected override PropertyPickHandler PickListField(string fieldName, IList list) => () =>
     {
-        base.PickListField(name, list);
+        base.PickListField(fieldName, list);
         newPropLength = list.Count;
     };
 
-    protected override PropertyPickHandler PickArrayField(string name, Array array) => () =>
+    protected override PropertyPickHandler PickArrayField(string fieldName, Array array) => () =>
     {
-        base.PickArrayField(name, array);
+        base.PickArrayField(fieldName, array);
         newPropLength = array.Length;
     };
 
     private void ShowIndexPicker()
     {
+        Assert.IsNotNull(PropertyProp);
+        Assert.IsNotNull(PropertyTypeProp);
+        Assert.IsNotNull(indexProp);
         var targ = (serializedObject.targetObject as Slot)?.targetScript;
-        var propName = propertyProp.stringValue;
-        var propType = (SlotPropertyType)propertyTypeProp.intValue;
+        var propName = PropertyProp!.stringValue;
+        var propType = (SlotPropertyType)PropertyTypeProp!.intValue;
         int len = -1;
-        BaseSlot.GetAccess(targ, propName, propType, null, (list, dataType) => len = list.Count, (array, dataType) => len = array.Length, null);
+        BaseSlot.GetAccess(targ, propName, propType, null, (list, _) => len = list.Count, (array, _) => len = array.Length, null);
         if (len == -1)
         {
             return;
@@ -76,7 +81,7 @@ public class SlotEditor : BaseSlotEditor
             EditorGUILayout.LabelField(prefixLabel, "Collection size is 0", EditorStyles.textField);
             return;
         }
-        var index = Mathf.Clamp(indexProp.intValue, 0, len - 1);
-        indexProp.intValue = EditorGUILayout.IntSlider(prefixLabel + " (0-" + (len-1).ToString() + ")", index, 0, len - 1);
+        var index = Mathf.Clamp(indexProp!.intValue, 0, len - 1);
+        indexProp.intValue = EditorGUILayout.IntSlider($"{prefixLabel} (0-{len-1})", index, 0, len - 1);
     }
 }

@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
+
+#nullable enable
 
 public class SlotsContainer : FallbackSlotContainer
 {
-    public List<FallbackSlotContainer> subSlots;
+    public List<FallbackSlotContainer> subSlots = new();
 
     public override void UpdateAllSlots()
     {
@@ -13,7 +13,7 @@ public class SlotsContainer : FallbackSlotContainer
             nextSubSlot?.UpdateAllSlots();
         }
     }
-    public override Slot FindFreeSlotFor(DraggableModel model)
+    public override Slot? FindFreeSlotFor(IDraggableModel model)
     {
         foreach(var nextSlot in subSlots)
         {
@@ -33,6 +33,5 @@ public class SlotsContainer : FallbackSlotContainer
                 yield return subSlot;
             }
         }
-        yield break;
     }
 }

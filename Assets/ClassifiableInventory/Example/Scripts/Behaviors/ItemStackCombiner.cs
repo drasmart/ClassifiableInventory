@@ -1,20 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
 public class ItemStackCombiner : MonoBehaviour
 {
     public void OnStackAttempt(DropTransaction transaction)
     {
-        if (!transaction.valid)
+        if (!transaction.Valid)
         {
             return;
         }
-        var srcStack = transaction.draggableUI.draggableModel as Item;
-        var dstStack = transaction.dropSlot.draggableModel as Item;
+        var srcStack = transaction.DraggableUI.DraggableModel as Item;
+        var dstStack = transaction.DropSlot.DraggableModel as Item;
 
-        if (srcStack == null || dstStack == null || transaction.draggableUI.slot == transaction.dropSlot)
+        if (srcStack == null || dstStack == null || transaction.DraggableUI.slot == transaction.DropSlot)
         {
             return;
         }
@@ -25,14 +22,14 @@ public class ItemStackCombiner : MonoBehaviour
             srcStack.count -= deltaSize;
             if (srcStack.count == 0)
             {
-                var slot = transaction.draggableUI.slot;
+                var slot = transaction.DraggableUI.slot;
                 if (slot)
                 {
-                    slot.draggableModel = null;
+                    slot.DraggableModel = null;
                     slot.UpdateAllSlots();
                 }
             }
-            transaction.dropSlot.UpdateAllSlots();
+            transaction.DropSlot.UpdateAllSlots();
             transaction.Invalidate();
         }
     }

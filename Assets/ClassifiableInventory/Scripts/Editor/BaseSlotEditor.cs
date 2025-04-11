@@ -2,36 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Classification;
 using System;
+using UnityEngine.Assertions;
+
+#nullable enable
 
 public class BaseSlotEditor : Editor
 {
-    protected SerializedProperty targetProp;
-    protected SerializedProperty propertyProp;
-    protected SerializedProperty propertyTypeProp;
-    protected SerializedProperty fallbackSlotProp;
-    protected SerializedProperty keepShadowWhileDraggingProp;
-    protected SerializedProperty isReadOnlyProp;
+    protected SerializedProperty? TargetProp;
+    protected SerializedProperty? PropertyProp;
+    protected SerializedProperty? PropertyTypeProp;
+    protected SerializedProperty? FallbackSlotProp;
+    protected SerializedProperty? KeepShadowWhileDraggingProp;
+    protected SerializedProperty? IsReadOnlyProp;
 
     private bool unfoldReflectedProperty = true;
-    private LastDropClick lastDropClick;
+    private LastDropClick? lastDropClick;
 
     protected virtual void OnEnable()
     {
-        targetProp = serializedObject.FindProperty("targetScript");
-        propertyProp = serializedObject.FindProperty("property");
-        propertyTypeProp = serializedObject.FindProperty("propertyType");
-        fallbackSlotProp = serializedObject.FindProperty("fallbackSlotContainer");
-        keepShadowWhileDraggingProp = serializedObject.FindProperty("keepShadowWhileDragging");
-        isReadOnlyProp = serializedObject.FindProperty("isReadOnly");
+        TargetProp = serializedObject.FindProperty("targetScript");
+        PropertyProp = serializedObject.FindProperty("property");
+        PropertyTypeProp = serializedObject.FindProperty("propertyType");
+        FallbackSlotProp = serializedObject.FindProperty("fallbackSlotContainer");
+        KeepShadowWhileDraggingProp = serializedObject.FindProperty("keepShadowWhileDragging");
+        IsReadOnlyProp = serializedObject.FindProperty("isReadOnly");
     }
 
     protected delegate void PropertyPickHandler();
 
-    protected virtual PropertyPickHandler PickPlainField(string name, System.Reflection.FieldInfo field) => () => lastDropClick = new LastDropClick(name, SlotPropertyType.Plain);
-    protected virtual PropertyPickHandler PickListField (string name, IList list) => () => lastDropClick = new LastDropClick(name, SlotPropertyType.List);
-    protected virtual PropertyPickHandler PickArrayField(string name, Array array) => () => lastDropClick = new LastDropClick(name, SlotPropertyType.Array);
+    protected virtual PropertyPickHandler? PickPlainField(string fieldName, System.Reflection.FieldInfo _) => () => lastDropClick = new LastDropClick(fieldName, SlotPropertyType.Plain);
+    protected virtual PropertyPickHandler? PickListField (string fieldName, IList list) => () => lastDropClick = new LastDropClick(fieldName, SlotPropertyType.List);
+    protected virtual PropertyPickHandler? PickArrayField(string fieldName, Array array) => () => lastDropClick = new LastDropClick(fieldName, SlotPropertyType.Array);
 
     public override void OnInspectorGUI()
     {
@@ -44,37 +46,40 @@ public class BaseSlotEditor : Editor
 
     protected virtual void OnSlotInspection()
     {
+        Assert.IsNotNull(PropertyProp);
+        Assert.IsNotNull(PropertyTypeProp);
+        
         if (lastDropClick != null)
         {
-            propertyProp.stringValue = lastDropClick.property;
-            propertyTypeProp.enumValueIndex = (int)lastDropClick.propertyType;
+            PropertyProp!.stringValue = lastDropClick.Property;
+            PropertyTypeProp!.enumValueIndex = (int)lastDropClick.PropertyType;
             lastDropClick = null;
         }
 
-        if (unfoldReflectedProperty = EditorGUILayout.Foldout(unfoldReflectedProperty, "Reflected Data"))
+        unfoldReflectedProperty = EditorGUILayout.Foldout(unfoldReflectedProperty, "Reflected Data");
+        if (unfoldReflectedProperty)
         {
-            using (var h = new EditorGUI.IndentLevelScope(1))
-            {
-                EditorGUILayout.PropertyField(targetProp);
+            using var h = new EditorGUI.IndentLevelScope(1);
+            EditorGUILayout.PropertyField(TargetProp);
 
-                DrawReflectedProperty();
-            }
+            DrawReflectedProperty();
         }
 
-        EditorGUILayout.PropertyField(fallbackSlotProp);
-        using (var h = new EditorGUILayout.HorizontalScope())
+        EditorGUILayout.PropertyField(FallbackSlotProp);
         {
-            EditorGUILayout.PropertyField(keepShadowWhileDraggingProp);
-            EditorGUILayout.PropertyField(isReadOnlyProp);
+            using var _ = new EditorGUILayout.HorizontalScope();
+            EditorGUILayout.PropertyField(KeepShadowWhileDraggingProp);
+            EditorGUILayout.PropertyField(IsReadOnlyProp);
         }
     }
 
     protected virtual void DrawReflectedProperty()
     {
-        using (var h = new EditorGUILayout.HorizontalScope())
+        Assert.IsNotNull(PropertyProp);
+        using (var _ = new EditorGUILayout.HorizontalScope())
         {
             EditorGUILayout.PrefixLabel(new GUIContent("Reflected Field"));
-            if (!EditorGUILayout.DropdownButton(new GUIContent(propertyProp.stringValue), FocusType.Keyboard))
+            if (!EditorGUILayout.DropdownButton(new GUIContent(PropertyProp!.stringValue), FocusType.Keyboard))
             {
                 return;
             }
@@ -89,18 +94,17 @@ public class BaseSlotEditor : Editor
         GenericMenu menu = new GenericMenu();
 
         var t = targ.GetType();
-        var q = typeof(DraggableModel);
-        var qName = q.Name;
+        var q = typeof(IDraggableModel);
 
         foreach (var nextField in t.GetFields())
         {
             var nextType = nextField.FieldType;
-            var name = nextField.Name;
-            bool active = name == propertyProp.stringValue;
+            var fieldName = nextField.Name;
+            bool active = fieldName == PropertyProp.stringValue;
 
             if (q.IsAssignableFrom(nextType))
             {
-                AddDropdownOption(menu, name, active, PickPlainField(name, nextField));
+                AddDropdownOption(menu, fieldName, active, PickPlainField(fieldName, nextField));
                 continue;
             }
 
@@ -112,19 +116,29 @@ public class BaseSlotEditor : Editor
                     var testType = genericArgs[0];
                     if (q.IsAssignableFrom(testType))
                     {
-                        AddDropdownOption(menu, name, active, PickListField(name, nextField.GetValue(targ) as IList));
+                        if (nextField.GetValue(targ) is IList list)
+                        {
+                            AddDropdownOption(
+                                menu,
+                                fieldName,
+                                active,
+                                PickListField(fieldName, list));
+                        }
                         continue;
                     }
                 }
             }
 
-            if (nextType.IsArray)
+            if (nextType.IsArray && nextField.GetValue(targ) is Array array)
             {
                 var testType = nextType.GetElementType();
                 if (q.IsAssignableFrom(testType))
                 {
-                    AddDropdownOption(menu, name, active, PickArrayField(name, nextField.GetValue(targ) as Array));
-                    continue;
+                    AddDropdownOption(
+                        menu,
+                        fieldName,
+                        active,
+                        PickArrayField(fieldName, array));
                 }
             }
         }
@@ -132,23 +146,23 @@ public class BaseSlotEditor : Editor
         menu.ShowAsContext();
     }
 
-    private void AddDropdownOption(GenericMenu menu, string name, bool active, PropertyPickHandler pickHandler)
+    private void AddDropdownOption(GenericMenu menu, string fieldName, bool active, PropertyPickHandler? pickHandler)
     {
-        if (pickHandler != null)
+        if (pickHandler is not null)
         {
-            menu.AddItem(new GUIContent(name), active, () => pickHandler());
+            menu.AddItem(new GUIContent(fieldName), active, () => pickHandler());
         }
     }
 
     private class LastDropClick
     {
-        public readonly string property;
-        public readonly SlotPropertyType propertyType;
+        public readonly string Property;
+        public readonly SlotPropertyType PropertyType;
 
         public LastDropClick(string property, SlotPropertyType propertyType)
         {
-            this.property = property;
-            this.propertyType = propertyType;
+            Property = property;
+            PropertyType = propertyType;
         }
     }
 }

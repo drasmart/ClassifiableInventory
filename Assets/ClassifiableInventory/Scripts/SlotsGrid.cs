@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Classification;
+using UnityEngine.Assertions;
+
+#nullable enable
 
 [RequireComponent(typeof(GridLayoutGroup))]
 public class SlotsGrid : BaseSlot
 {
-    public GameObject slotPrefab;
+    public GameObject? slotPrefab;
 
-    private List<Slot> spawnedSlots = new List<Slot>();
-    private Classifiable classifiable;
-    private Slot slotPrime;
+    private List<Slot> spawnedSlots = new();
+    private Classifiable? classifiable;
+    private Slot? slotPrime;
 
     private void Awake()
     {
@@ -24,15 +27,17 @@ public class SlotsGrid : BaseSlot
     }
     public override void UpdateAllSlots()
     {
-        if (slotPrime == null || classifiable == null)
+        Assert.IsNotNull(slotPrime);
+        Assert.IsNotNull(classifiable);
+        if (!slotPrime || !classifiable)
         {
             return;
         }
         int count = 0;
         GetAccess(targetScript, property, propertyType,
             null,
-            (list, dataType) => count = list.Count,
-            (array, dataType) => count = array.Length,
+            (list, _) => count = list.Count,
+            (array, _) => count = array.Length,
             null);
         for (int i = 0; i < count; i++)
         {
@@ -52,7 +57,7 @@ public class SlotsGrid : BaseSlot
             }
             else
             {
-                var nextSlot = Instantiate(slotPrime);
+                var nextSlot = Instantiate(slotPrime, transform, false);
                 var nextClassifiable = nextSlot.GetComponent<Classifiable>();
 
                 nextSlot.gameObject.SetActive(false);
@@ -60,7 +65,6 @@ public class SlotsGrid : BaseSlot
                 SetupSlot(nextSlot, i);
                 nextClassifiable.Clear();
                 nextClassifiable.AddAllFrom(classifiable);
-                nextSlot.transform.SetParent(transform, false);
 
                 nextSlot.gameObject.SetActive(true);
 
@@ -82,14 +86,14 @@ public class SlotsGrid : BaseSlot
         slot.keepShadowWhileDragging = keepShadowWhileDragging;
         slot.isReadOnly = isReadOnly;
     }
-    public override Slot FindFreeSlotFor(DraggableModel model)
+    public override Slot? FindFreeSlotFor(IDraggableModel model)
     {
-        System.Type storageType = null;
-        IList storage = null;
+        System.Type? storageType = null;
+        IList? storage = null;
         GetAccess(targetScript, property, propertyType,
             null,
             (list, dataType) => { storageType = dataType; storage = list; },
-            (array, dataType) => { storageType = dataType; storage = array as IList; },
+            (array, dataType) => { storageType = dataType; storage = array; },
             null);
         int index = -1;
         if (storage != null)
@@ -97,14 +101,14 @@ public class SlotsGrid : BaseSlot
             for(int i = 0, n = storage.Count; i < n; i++)
             {
                 var nextObj = storage[i];
-                if ((nextObj == null) || ((nextObj as DraggableModel)?.IsNull == true))
+                if ((nextObj == null) || ((nextObj as IDraggableModel)?.IsNull == true))
                 {
                     index = i;
                     break;
                 }
             }
         }
-        if (!(index != -1 && storageType != null && storageType.IsAssignableFrom(model.GetType())))
+        if (!(index != -1 && storageType is not null && storageType.IsAssignableFrom(model.GetType())))
         {
             return null;
         }

@@ -1,22 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿#nullable enable
 
 public class DropTransaction
 {
-    public readonly DraggableUI draggableUI;
-    public readonly Slot dropSlot;
-    public readonly Slot fallbackSlot;
+    public readonly DraggableUI DraggableUI;
+    public readonly Slot? DropSlot;
+    public readonly Slot? FallbackSlot;
 
-    public bool valid { get; private set; }
+    public bool Valid { get; private set; }
 
-    public DropTransaction(DraggableUI draggableUI, Slot dropSlot, Slot fallbackSlot, bool valid)
+    public DropTransaction(DraggableUI draggableUI, Slot? dropSlot, Slot? fallbackSlot, bool valid)
     {
-        this.draggableUI = draggableUI;
-        this.dropSlot = dropSlot;
-        this.fallbackSlot = fallbackSlot;
-        this.valid = valid;
+        DraggableUI = draggableUI;
+        DropSlot = dropSlot;
+        FallbackSlot = fallbackSlot;
+        Valid = valid;
     }
 
-    public void Invalidate() { valid = false; }
+    public void Invalidate() { Valid = false; }
 }

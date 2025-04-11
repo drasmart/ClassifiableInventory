@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Classification;
 
 
 [System.Serializable]
-public class Item : DraggableModel
+public class Item : IDraggableModel
 {
     public ItemType itemType;
     [Min(0)]
@@ -14,7 +12,7 @@ public class Item : DraggableModel
     [Min(0)]
     public int count;
 
-    public Classifiable.TypeAsset[] classes {
+    public Classifiable.TypeAsset[] Classes {
         get {
             var slots = itemType?.slotTypes;
             if (slots == null)

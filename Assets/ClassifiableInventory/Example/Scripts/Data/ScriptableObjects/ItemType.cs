@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Inventory/Item Type")]
 public class ItemType : ScriptableObject, SpritedAsset

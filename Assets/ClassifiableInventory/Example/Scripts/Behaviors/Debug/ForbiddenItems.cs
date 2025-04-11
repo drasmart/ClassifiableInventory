@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(FallbackSlotContainer))]
@@ -16,23 +15,23 @@ public class ForbiddenItems : MonoBehaviour
 
     public void Validate(DropTransaction transaction)
     {
-        if (!enabled || blacklist == null || !transaction.valid || transaction.dropSlot == null)
+        if (!enabled || blacklist == null || !transaction.Valid || transaction.DropSlot == null)
         {
             return;
         }
-        var mainItemType = (transaction.draggableUI.draggableModel as Item)?.itemType;
+        var mainItemType = (transaction.DraggableUI.DraggableModel as Item)?.itemType;
         if (mainItemType != null)
         {
-            if (blacklist.Contains(mainItemType) && slotsContainer.HasSlot(transaction.dropSlot))
+            if (blacklist.Contains(mainItemType) && slotsContainer.HasSlot(transaction.DropSlot))
             {
                 transaction.Invalidate();
                 return;
             }
         }
-        var swapItemType = (transaction.dropSlot.draggableModel as Item)?.itemType;
-        if (swapItemType != null && transaction.fallbackSlot != null)
+        var swapItemType = (transaction.DropSlot.DraggableModel as Item)?.itemType;
+        if (swapItemType != null && transaction.FallbackSlot != null)
         {
-            if (blacklist.Contains(swapItemType) && slotsContainer.HasSlot(transaction.fallbackSlot))
+            if (blacklist.Contains(swapItemType) && slotsContainer.HasSlot(transaction.FallbackSlot))
             {
                 transaction.Invalidate();
                 return;

@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
-using Classification;
-using System;
+﻿using UnityEditor;
+
+#nullable enable
 
 [CustomEditor(typeof(SlotsGrid))]
 [CanEditMultipleObjects]
 public class SlotsGridEditor : BaseSlotEditor
 {
-    private SerializedProperty slotPrefabProp;
+    private SerializedProperty? slotPrefabProp;
 
     protected override void OnEnable()
     {
@@ -23,5 +20,5 @@ public class SlotsGridEditor : BaseSlotEditor
         base.OnSlotInspection();
     }
 
-    protected override PropertyPickHandler PickPlainField(string name, System.Reflection.FieldInfo field) => null;
+    protected override PropertyPickHandler? PickPlainField(string fieldName, System.Reflection.FieldInfo field) => null;
 }

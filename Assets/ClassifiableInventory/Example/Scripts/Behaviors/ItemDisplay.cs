@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemDisplay : MonoBehaviour
@@ -10,7 +8,7 @@ public class ItemDisplay : MonoBehaviour
 
     public Color shadowColor = Color.white;
 
-    public void UpdateUI(DraggableModel draggableModel, bool isShadow)
+    public void UpdateUI(IDraggableModel draggableModel, bool isShadow)
     {
         var item = draggableModel as Item;
         if (iconImage)
