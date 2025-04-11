@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+#nullable enable
+
 public class SkillDisplay : MonoBehaviour
 {
-    public Image iconImage;
+    public Image? iconImage;
 
     public void UpdateUI(IDraggableModel draggableModel, bool isShadow)
     {

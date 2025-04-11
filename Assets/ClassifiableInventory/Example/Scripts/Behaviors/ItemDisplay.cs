@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+#nullable enable
+
 public class ItemDisplay : MonoBehaviour
 {
-    public Image iconImage;
-    public Text countText;
+    public Image? iconImage;
+    public Text? countText;
 
     public Color shadowColor = Color.white;
 

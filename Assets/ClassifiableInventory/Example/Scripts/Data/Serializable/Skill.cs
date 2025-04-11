@@ -8,7 +8,7 @@ public class Skill : IDraggableModel
     [Min(0)]
     public int level = 0;
 
-    public bool IsNull => skillType == null;
+    public bool IsNull => !skillType;
 
     public Classifiable.TypeAsset[] Classes {
         get {

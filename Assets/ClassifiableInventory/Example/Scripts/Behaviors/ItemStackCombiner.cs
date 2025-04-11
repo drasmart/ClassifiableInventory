@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+#nullable enable
+
 public class ItemStackCombiner : MonoBehaviour
 {
     public void OnStackAttempt(DropTransaction transaction)
@@ -9,7 +11,7 @@ public class ItemStackCombiner : MonoBehaviour
             return;
         }
         var srcStack = transaction.DraggableUI.DraggableModel as Item;
-        var dstStack = transaction.DropSlot.DraggableModel as Item;
+        var dstStack = transaction.DropSlot?.DraggableModel as Item;
 
         if (srcStack == null || dstStack == null || transaction.DraggableUI.slot == transaction.DropSlot)
         {
@@ -29,7 +31,7 @@ public class ItemStackCombiner : MonoBehaviour
                     slot.UpdateAllSlots();
                 }
             }
-            transaction.DropSlot.UpdateAllSlots();
+            transaction.DropSlot?.UpdateAllSlots();
             transaction.Invalidate();
         }
     }

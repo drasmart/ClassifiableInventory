@@ -1,9 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Assertions;
+
+#nullable enable
 
 public class LibraryKeeper : MonoBehaviour
 {
-    public PlayerInventory playerInventory;
-    public Skill[] skills;
+    public PlayerInventory? playerInventory;
+    public Skill[] skills = Array.Empty<Skill>();
 
     public void OnEnable()
     {
@@ -12,12 +16,14 @@ public class LibraryKeeper : MonoBehaviour
 
     public void ReloadSkills()
     {
+        Assert.IsNotNull(playerInventory);
         InstallSkills();
-        playerInventory.onDataUpdate?.Invoke();
+        playerInventory!.onDataUpdate?.Invoke();
     }
 
     private void InstallSkills()
     {
-        skills = playerInventory?.knownSkills?.ToArray();
+        Assert.IsNotNull(playerInventory);
+        skills = playerInventory!.knownSkills.ToArray();
     }
 }

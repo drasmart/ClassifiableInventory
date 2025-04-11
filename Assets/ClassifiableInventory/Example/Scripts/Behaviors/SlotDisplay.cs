@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
+
+#nullable enable
 
 public class SlotDisplay : MonoBehaviour
 {
-    public Image backgroundImage;
-    public GameObject nonAcceptingOverlay;
+    public Image? backgroundImage;
+    public GameObject? nonAcceptingOverlay;
 
     public BackgroundColors backgroundColors = new BackgroundColors();
 
     private void Awake()
     {
-        backgroundImage.color = backgroundColors.passive;
-        nonAcceptingOverlay.SetActive(false);
+        Assert.IsNotNull(backgroundImage);
+        Assert.IsNotNull(nonAcceptingOverlay);
+        backgroundImage!.color = backgroundColors.passive;
+        nonAcceptingOverlay!.SetActive(false);
     }
 
     [System.Serializable]

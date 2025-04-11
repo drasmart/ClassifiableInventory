@@ -2,10 +2,12 @@
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
+#nullable enable
+
 [RequireComponent(typeof(SlotsContainer))]
 public class SlotsHighlighter : MonoBehaviour
 {
-    private SlotsContainer slotsContainer;
+    private SlotsContainer? slotsContainer;
 
     private void Awake()
     {
@@ -18,25 +20,27 @@ public class SlotsHighlighter : MonoBehaviour
         {
             if (slot == draggableUI.slot)
             {
-                display.backgroundImage.color = display.backgroundColors.source;
+                display.backgroundImage!.color = display.backgroundColors.source;
                 return;
             }
-            if (!DragManager.SlotAcceptsValue(slot, draggableUI.DraggableModel))
+            if (draggableUI.DraggableModel is { } model && !DragManager.SlotAcceptsValue(slot, model))
             {
-                display.nonAcceptingOverlay.SetActive(true);
+                display.nonAcceptingOverlay!.SetActive(true);
                 return;
             }
             if (slot.isReadOnly && draggableUI.slot?.isReadOnly == true)
             {
-                display.nonAcceptingOverlay.SetActive(true);
+                display.nonAcceptingOverlay!.SetActive(true);
                 return;
             }
-            display.backgroundImage.color = display.backgroundColors.normal;
+            display.backgroundImage!.color = display.backgroundColors.normal;
         });
     }
     public void OnDragMoved(PointerEventData eventData, DropTransaction transaction)
     {
-        bool dropSlotAccepts = DragManager.SlotAcceptsValue(transaction.DropSlot, transaction.DraggableUI.DraggableModel);
+        bool dropSlotAccepts = transaction.DropSlot is { } dropSlot 
+                               && transaction.DraggableUI.DraggableModel is { } model
+                               && DragManager.SlotAcceptsValue(dropSlot, model);
         bool fromReadOnly = (transaction.DraggableUI.slot?.isReadOnly == true);
         ForEachSlot((slot, display) =>
         {
@@ -45,37 +49,37 @@ public class SlotsHighlighter : MonoBehaviour
             {
                 if (slot == transaction.DraggableUI.slot)
                 {
-                    display.backgroundImage.color = (slot == transaction.FallbackSlot) ? colors.swapSource : colors.source;
+                    display.backgroundImage!.color = (slot == transaction.FallbackSlot) ? colors.swapSource : colors.source;
                 }
                 else if (slot.isReadOnly && fromReadOnly)
                 {
-                    return;
+                    // nop
                 }
                 else if (slot == transaction.DropSlot)
                 {
-                    display.backgroundImage.color = (slot.DraggableModel == null || slot.DraggableModel.IsNull) ? colors.dropDestination : colors.swapDestination;
+                    display.backgroundImage!.color = (slot.DraggableModel == null || slot.DraggableModel.IsNull) ? colors.dropDestination : colors.swapDestination;
                 }
                 else
                 {
-                    display.backgroundImage.color = (slot == transaction.FallbackSlot) ? colors.swapFallback : colors.normal;
+                    display.backgroundImage!.color = (slot == transaction.FallbackSlot) ? colors.swapFallback : colors.normal;
                 }
             } else
             {
                 if (slot == transaction.DraggableUI.slot)
                 {
-                    display.backgroundImage.color = (fromReadOnly || slot == transaction.DropSlot || transaction.DropSlot == null || !dropSlotAccepts) ? colors.source : colors.invalidSource;
+                    display.backgroundImage!.color = (fromReadOnly || slot == transaction.DropSlot || !transaction.DropSlot || !dropSlotAccepts) ? colors.source : colors.invalidSource;
                 } 
                 else if (slot.isReadOnly && fromReadOnly)
                 {
-                    return;
+                    // nop
                 }
                 else if (slot == transaction.DropSlot)
                 {
-                    display.backgroundImage.color = dropSlotAccepts ? colors.invalidDestination : colors.normal;
+                    display.backgroundImage!.color = dropSlotAccepts ? colors.invalidDestination : colors.normal;
                 }
                 else
                 {
-                    display.backgroundImage.color = colors.normal;
+                    display.backgroundImage!.color = colors.normal;
                 }
             }
         });
@@ -90,16 +94,16 @@ public class SlotsHighlighter : MonoBehaviour
     }
     public void OnDragCancelled(DraggableUI draggableUI)
     {
-        ForEachSlot((slot, display) =>
+        ForEachSlot((_, display) =>
         {
-            display.backgroundImage.color = display.backgroundColors.passive;
-            display.nonAcceptingOverlay.SetActive(false);
+            display.backgroundImage!.color = display.backgroundColors.passive;
+            display.nonAcceptingOverlay!.SetActive(false);
         });
     }
 
     private void ForEachSlot(UnityAction<Slot, SlotDisplay> action)
     {
-        if (slotsContainer == null)
+        if (!slotsContainer)
         {
             return;
         }

@@ -86,7 +86,7 @@ public class BaseSlotEditor : Editor
         }
 
         var targ = (serializedObject.targetObject as BaseSlot)?.targetScript;
-        if (targ == null)
+        if (!targ)
         {
             return;
         }

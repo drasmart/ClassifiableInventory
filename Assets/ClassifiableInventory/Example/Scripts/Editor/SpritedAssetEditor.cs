@@ -17,7 +17,7 @@ public abstract class SpritedAssetEditor<T> : Editor where T: SpritedAsset
         {
             result = TextureFromSprite(previewSprite);
         }
-        if (result == null)
+        if (!result)
         {
             return base.RenderStaticPreview(assetPath, subAssets, width, height);
         }

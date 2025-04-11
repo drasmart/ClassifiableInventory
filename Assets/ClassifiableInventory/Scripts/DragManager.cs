@@ -327,7 +327,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
     private void Detach(DraggableUI draggable, bool unlink)
     {
-        if (draggable == null)
+        if (!draggable)
         {
             return;
         }
@@ -417,7 +417,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
     public static bool SlotAcceptsValue(Slot slot, IDraggableModel model)
     {
-        if (slot == null)
+        if (!slot)
         {
             return false;
         }

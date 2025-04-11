@@ -3,7 +3,7 @@ using UnityEngine;
 using Classification;
 
 
-[System.Serializable]
+[Serializable]
 public class Item : IDraggableModel
 {
     public ItemType itemType;
@@ -23,11 +23,11 @@ public class Item : IDraggableModel
         }
     }
 
-    public bool IsNull { get { return itemType == null || count == 0; } }
+    public bool IsNull => !itemType || count == 0;
 
     public int? FreeCapacity {
         get {
-            if (itemType == null || itemType.stackSize == 0)
+            if (!itemType || itemType.stackSize == 0)
             {
                 return null;
             }

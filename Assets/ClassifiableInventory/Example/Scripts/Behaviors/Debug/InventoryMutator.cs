@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 
+#nullable enable
+
 public class InventoryMutator : MonoBehaviour
 {
-    public PlayerInventory inventory;
-    public ItemType itemType;
+    public PlayerInventory? inventory;
+    public ItemType? itemType;
 
     void Update()
     {
-        if (inventory == null || itemType == null)
+        if (!inventory || !itemType)
         {
             enabled = false;
             return;
@@ -25,7 +27,7 @@ public class InventoryMutator : MonoBehaviour
         }
         if (mutated)
         {
-            inventory.onDataUpdate.Invoke();
+            inventory.onDataUpdate?.Invoke();
         }
     }
 }
