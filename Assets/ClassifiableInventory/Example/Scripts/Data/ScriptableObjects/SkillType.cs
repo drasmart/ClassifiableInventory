@@ -1,13 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+#nullable enable
 
 [CreateAssetMenu(menuName = "Inventory/Skill Type")]
-public class SkillType : ScriptableObject, SpritedAsset
+public class SkillType : ScriptableObject, ISpritedAsset
 {
-    public SkillTypeAsset[] slotTypes;
-    public Sprite sprite;
+    public SkillTypeAsset[] slotTypes = Array.Empty<SkillTypeAsset>();
+    public Sprite? sprite;
     [Min(0)]
     public float baseManaCost;
 
-    public Sprite previewSprite => sprite;
+    public Sprite? PreviewSprite => sprite;
 }

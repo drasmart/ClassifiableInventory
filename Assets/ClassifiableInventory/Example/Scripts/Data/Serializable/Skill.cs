@@ -1,10 +1,13 @@
-﻿using Classification;
+﻿using System;
+using Classification;
 using UnityEngine;
+
+#nullable enable
 
 [System.Serializable]
 public class Skill : IDraggableModel
 {
-    public SkillType skillType;
+    public SkillType? skillType;
     [Min(0)]
     public int level = 0;
 
@@ -15,9 +18,9 @@ public class Skill : IDraggableModel
             var slots = skillType?.slotTypes;
             if (slots == null)
             {
-                return new Classifiable.TypeAsset[0];
+                return Array.Empty<Classifiable.TypeAsset>();
             }
-            return System.Array.ConvertAll<SkillTypeAsset, Classifiable.TypeAsset>(slots, (slotType) => slotType);
+            return Array.ConvertAll<SkillTypeAsset, Classifiable.TypeAsset>(slots, (slotType) => slotType);
         }
     }
 }

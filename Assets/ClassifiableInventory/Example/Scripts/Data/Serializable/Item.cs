@@ -2,11 +2,12 @@
 using UnityEngine;
 using Classification;
 
+#nullable enable
 
 [Serializable]
 public class Item : IDraggableModel
 {
-    public ItemType itemType;
+    public ItemType? itemType;
     [Min(0)]
     public int durability;
     [Min(0)]
@@ -17,7 +18,7 @@ public class Item : IDraggableModel
             var slots = itemType?.slotTypes;
             if (slots == null)
             {
-                return new Classifiable.TypeAsset[0];
+                return Array.Empty<Classifiable.TypeAsset>();
             }
             return Array.ConvertAll<ItemSlotTypeAsset, Classifiable.TypeAsset>(slots, (slotType) => slotType);
         }
@@ -35,7 +36,7 @@ public class Item : IDraggableModel
         }
     }
 
-    public Item(ItemType itemType, int durability, int count)
+    public Item(ItemType? itemType, int durability, int count)
     {
         this.itemType = itemType;
         this.durability = durability;
@@ -46,8 +47,8 @@ public class Item : IDraggableModel
 
     public int FreeSlotsFor(Item other)
     {
-        var otherType = other?.itemType;
-        if (itemType != null && itemType == otherType)
+        var otherType = other.itemType;
+        if (itemType && itemType == otherType)
         {
             return FreeCapacity ?? other.count;
         }
