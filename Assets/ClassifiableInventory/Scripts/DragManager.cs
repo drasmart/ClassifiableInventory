@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -11,18 +10,18 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 {
     public static DragManager Instance {
         get {
-            if (instance == null)
+            if (!_instance)
             {
-                instance = FindObjectOfType<DragManager>();
+                _instance = FindAnyObjectByType<DragManager>();
             }
-            return instance;
+            return _instance;
         }
     }
-    private static DragManager instance;
+    private static DragManager _instance;
 
     private DraggableUI draggedItem;
     private DraggableUI shadowClone;
-    private RectTransform draggedTransform { get { return draggedItem?.transform as RectTransform; } }
+    private RectTransform DraggedTransform => draggedItem?.transform as RectTransform;
     private Vector3 dragOffset;
 
     [Header("Prefabs")]
@@ -33,7 +32,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     private Canvas canvas;
 
-    private List<RaycastResult> raycastResults = new List<RaycastResult>();
+    private readonly List<RaycastResult> raycastResults = new();
     private Vector2 lastEventPosition;
 
     [Header("Drag Events")]
@@ -49,6 +48,10 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     [Header("Combination")]
     public DropTransactionValidationEvent combinationEvent;
 
+    [Header("Debug")]
+    [SerializeField] private bool logReportCalls;
+    [SerializeField] private bool logReportPoints;
+
     [System.Serializable] public class DragStartedEvent : UnityEvent<PointerEventData, DraggableUI> { }
     [System.Serializable] public class DropTransactionValidationEvent : UnityEvent<DropTransaction> { }
     [System.Serializable] public class DragMovedEvent : UnityEvent<PointerEventData, DropTransaction> { }
@@ -59,17 +62,17 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void Awake()
     {
         canvas = GetComponentInParent<Canvas>();
-        if (instance == this)
+        if (_instance == this)
         {
             return;
         }
-        if (instance == null)
+        if (!_instance)
         {
-            instance = this;
+            _instance = this;
         }
         else
         {
-            Debug.LogWarning("[" + transform.name + "] DragManager.instance already assigned to '" + instance.transform.name + "'");
+            Debug.LogWarning("[" + transform.name + "] DragManager.instance already assigned to '" + _instance.transform.name + "'");
             enabled = false;
         }
     }
@@ -94,7 +97,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             }
         }
         var dragPoint = GetDragPoint(eventData);
-        dragOffset = draggedTransform.position - dragPoint;
+        dragOffset = DraggedTransform.position - dragPoint;
         Detach(draggedItem, false);
         onDragStarted?.Invoke(eventData, draggedItem);
     }
@@ -106,11 +109,11 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
     private void HandleDrag(PointerEventData eventData)
     {
-        if (draggedTransform == null)
+        if (DraggedTransform == null)
         {
             return;
         }
-        draggedTransform.position = dragOffset + GetDragPoint(eventData);
+        DraggedTransform.position = dragOffset + GetDragPoint(eventData);
         if (onDragMoved != null)
         {
             var dropTransaction = MakeDropTransaction(eventData);
@@ -121,7 +124,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public void OnEndDrag(PointerEventData eventData)
     {
         Report("OnEndDrag", eventData);
-        if (!draggedTransform)
+        if (!DraggedTransform)
         {
             return;
         }
@@ -164,10 +167,12 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void RefreshDrag()
     {
-        if (draggedItem != null)
+        if (!draggedItem)
         {
-            var fakeEvent = new PointerEventData(EventSystem.current);
-            fakeEvent.position = lastEventPosition;
+            var fakeEvent = new PointerEventData(EventSystem.current)
+            {
+                position = lastEventPosition
+            };
             HandleDrag(fakeEvent);
         }
     }
@@ -175,12 +180,12 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private DropTransaction MakeDropTransaction(PointerEventData eventData)
     {
         var dropCandidateSlot = GetFirstHit<Slot>(eventData, dragOffset);
-        if (dropCandidateSlot == null || draggedItem.draggableModel == null)
+        if (!dropCandidateSlot || draggedItem.draggableModel is null)
         {
             // no slot to drop, or no model to check acceptance
             return new DropTransaction(draggedItem, null, null, false);
         }
-        if (dropCandidateSlot != null)
+        if (dropCandidateSlot)
         {
             if (dropCandidateSlot == draggedItem.slot)
             {
@@ -194,7 +199,7 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             }
         }
         Slot dropFallbackSlot = null;
-        var oldDraggable = dropCandidateSlot?.draggableUI;
+        var oldDraggable = dropCandidateSlot.draggableUI;
         if (draggedItem.draggableModel == null || !SlotAcceptsValue(dropCandidateSlot, draggedItem.draggableModel))
         {
             // Can't accept draggable in this slot
@@ -210,30 +215,33 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                 // candidate slot has draggable without model
                 return new DropTransaction(draggedItem, dropCandidateSlot, null, false);
             }
-            do
+
+            dropFallbackSlot = ((System.Func<Slot, Slot>)((dropCandidateSlot2) =>
             {
-                if (oldSlot != null && SlotAcceptsValue(oldSlot, swapModel))
+                if (oldSlot && SlotAcceptsValue(oldSlot, swapModel))
                 {
-                    dropFallbackSlot = oldSlot;
-                    break;
+                    return oldSlot;
                 }
-                var primaryFallbackSlot = dropCandidateSlot.fallbackSlotContainer?.FindFreeSlotFor(swapModel);
-                if (primaryFallbackSlot != null && SlotAcceptsValue(primaryFallbackSlot, swapModel))
+                var primaryFallbackSlot = dropCandidateSlot2.fallbackSlotContainer?.FindFreeSlotFor(swapModel);
+                if (primaryFallbackSlot && SlotAcceptsValue(primaryFallbackSlot, swapModel))
                 {
-                    dropFallbackSlot = primaryFallbackSlot;
-                    break;
+                    return primaryFallbackSlot;
                 }
                 var otherFallbackSlot = oldSlot?.fallbackSlotContainer?.FindFreeSlotFor(swapModel);
-                if (otherFallbackSlot != null && SlotAcceptsValue(otherFallbackSlot, swapModel))
+                if (otherFallbackSlot && SlotAcceptsValue(otherFallbackSlot, swapModel))
                 {
-                    dropFallbackSlot = otherFallbackSlot;
-                    break;
+                    return otherFallbackSlot;
                 }
+                return null;
+            }))(dropCandidateSlot);
+
+            if (!dropFallbackSlot)
+            {
                 // fallback slot not found
                 return new DropTransaction(draggedItem, dropCandidateSlot, null, false);
-            } while (false);
+            }
         }
-        if (draggedItem.slot?.isReadOnly == true && dropCandidateSlot.isReadOnly)
+        if (draggedItem?.slot?.isReadOnly == true && dropCandidateSlot.isReadOnly)
         {
             return new DropTransaction(draggedItem, dropCandidateSlot, dropFallbackSlot, false);
         }
@@ -277,10 +285,18 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void Attach(DraggableUI draggable, Slot slot, bool link)
     {
         var dragTransform = draggable.transform as RectTransform;
+        if (!dragTransform)
+        {
+            return;
+        }
         var slotTransform = slot.draggableContainer;
-        if (slotTransform == null)
+        if (!slotTransform)
         {
             slotTransform = slot.transform as RectTransform;
+            if (!slotTransform)
+            {
+                return;
+            }
         }
         dragTransform.SetParent(slotTransform, true);
         dragTransform.localScale = Vector3.one;
@@ -339,11 +355,11 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
         var draggableUI = slot.draggableUI;
         var model = slot.draggableModel;
-        if (model == null || model.IsNull)
+        if (model is null || model.IsNull)
         {
-            if (draggableUI != null)
+            if (draggableUI)
             {
-                if (draggedItem != null && draggableUI == draggedItem)
+                if (draggedItem && draggableUI == draggedItem)
                 {
                     var reportedItem = draggedItem;
                     ClearDragData();
@@ -354,12 +370,8 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             }
             return;
         }
-        if (draggableUI == null)
+        if (!draggableUI)
         {
-            if (model == null)
-            {
-                return;
-            }
             draggableUI = SpawnDraggableUI(slot, true);
         }
         if (draggableUI)
@@ -427,13 +439,13 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         return true;
     }
 
-    private DraggableUI SpawnPrefab(DraggableUI prefab)
+    private static DraggableUI SpawnPrefab(DraggableUI prefab)
     {
         // TODO: Move to pool
         return Instantiate(prefab);
     }
 
-    private void Despawn(DraggableUI draggableUI)
+    private static void Despawn(DraggableUI draggableUI)
     {
         // TODO: Move to pool
         Destroy(draggableUI.gameObject);
@@ -449,8 +461,10 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
         else
         {
-            testEvent = new PointerEventData(EventSystem.current);
-            testEvent.position = eventData.position + GetEventPointDelta(localOffset.Value);
+            testEvent = new PointerEventData(EventSystem.current)
+            {
+                position = eventData.position + GetEventPointDelta(localOffset.Value)
+            };
         }
         EventSystem.current.RaycastAll(testEvent, raycastResults);
         foreach (var nextResult in raycastResults)
@@ -467,11 +481,18 @@ public class DragManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void Report(string method, PointerEventData eventData)
     {
         lastEventPosition = eventData.position;
-        //Debug.Log("[" + method + "]: " + eventData.ToString());
+        if (logReportCalls)
+        {
+            Debug.Log($"[{method}]: {eventData}");
+        }
 
         var lastEventPoint = GetDragPoint(eventData);
-        //Debug.Log(lastEventPoint);
-        if (lastEventImage != null)
+        if (logReportPoints)
+        {
+            Debug.Log($"lastEventPoint");
+        }
+
+        if (lastEventImage)
         {
             lastEventImage.position = lastEventPoint;
         }
