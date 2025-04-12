@@ -1,0 +1,16 @@
+{
+    "name": "Classification.Colors",
+    "rootNamespace": "",
+    "references": [
+        "GUID:663f63cf91f89d14fa3afe559a430c90"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

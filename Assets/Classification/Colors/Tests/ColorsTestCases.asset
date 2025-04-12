@@ -1,0 +1,231 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f9a0e18fc41cb44285e6668a3fc1014, type: 3}
+  m_Name: ColorsTestCases
+  m_EditorClassIdentifier: 
+  testCases:
+  - color: {fileID: 11400000, guid: 6f27f82b6ce8ba34fad6c5137204b428, type: 2}
+    colors:
+    - color: {fileID: 11400000, guid: 6f27f82b6ce8ba34fad6c5137204b428, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: c9928fd0a283c7e4696990f61db03ffe, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: fd4e4524eb2adf645921d26ccd4b23bf, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 0222e4b3827b0e34fb9dce9998206946, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 4633df429decc02429d832fc75ad119e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: c1c3179928e3ca1469dc7def60f74379, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 7883bd56d8f28584db93634c226dd32e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 6915091a7a19c1041b83c2a7610fe409, type: 2}
+      expected: 0
+    filters:
+    - filter: {fileID: 11400000, guid: 0b587185685e1e94c983ecd7ae153ef9, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: bb249eb7d0dd93544b7800ca3169a921, type: 2}
+      expected: 1
+    - filter: {fileID: 11400000, guid: 8c91956eabd69bf41929c64c884e3b09, type: 2}
+      expected: 1
+    - filter: {fileID: 11400000, guid: eb28092fc0f300a41925e35aced4d21e, type: 2}
+      expected: 0
+  - color: {fileID: 11400000, guid: c9928fd0a283c7e4696990f61db03ffe, type: 2}
+    colors:
+    - color: {fileID: 11400000, guid: 6f27f82b6ce8ba34fad6c5137204b428, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: c9928fd0a283c7e4696990f61db03ffe, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: fd4e4524eb2adf645921d26ccd4b23bf, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 0222e4b3827b0e34fb9dce9998206946, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 4633df429decc02429d832fc75ad119e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: c1c3179928e3ca1469dc7def60f74379, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 7883bd56d8f28584db93634c226dd32e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 6915091a7a19c1041b83c2a7610fe409, type: 2}
+      expected: 0
+    filters:
+    - filter: {fileID: 11400000, guid: 0b587185685e1e94c983ecd7ae153ef9, type: 2}
+      expected: 1
+    - filter: {fileID: 11400000, guid: bb249eb7d0dd93544b7800ca3169a921, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: 8c91956eabd69bf41929c64c884e3b09, type: 2}
+      expected: 1
+    - filter: {fileID: 11400000, guid: eb28092fc0f300a41925e35aced4d21e, type: 2}
+      expected: 0
+  - color: {fileID: 11400000, guid: fd4e4524eb2adf645921d26ccd4b23bf, type: 2}
+    colors:
+    - color: {fileID: 11400000, guid: 6f27f82b6ce8ba34fad6c5137204b428, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: c9928fd0a283c7e4696990f61db03ffe, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: fd4e4524eb2adf645921d26ccd4b23bf, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 0222e4b3827b0e34fb9dce9998206946, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 4633df429decc02429d832fc75ad119e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: c1c3179928e3ca1469dc7def60f74379, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 7883bd56d8f28584db93634c226dd32e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 6915091a7a19c1041b83c2a7610fe409, type: 2}
+      expected: 0
+    filters:
+    - filter: {fileID: 11400000, guid: 0b587185685e1e94c983ecd7ae153ef9, type: 2}
+      expected: 1
+    - filter: {fileID: 11400000, guid: bb249eb7d0dd93544b7800ca3169a921, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: 8c91956eabd69bf41929c64c884e3b09, type: 2}
+      expected: 1
+    - filter: {fileID: 11400000, guid: eb28092fc0f300a41925e35aced4d21e, type: 2}
+      expected: 1
+  - color: {fileID: 11400000, guid: 0222e4b3827b0e34fb9dce9998206946, type: 2}
+    colors:
+    - color: {fileID: 11400000, guid: 6f27f82b6ce8ba34fad6c5137204b428, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: c9928fd0a283c7e4696990f61db03ffe, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: fd4e4524eb2adf645921d26ccd4b23bf, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 0222e4b3827b0e34fb9dce9998206946, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 4633df429decc02429d832fc75ad119e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: c1c3179928e3ca1469dc7def60f74379, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 7883bd56d8f28584db93634c226dd32e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 6915091a7a19c1041b83c2a7610fe409, type: 2}
+      expected: 0
+    filters:
+    - filter: {fileID: 11400000, guid: 0b587185685e1e94c983ecd7ae153ef9, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: bb249eb7d0dd93544b7800ca3169a921, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: 8c91956eabd69bf41929c64c884e3b09, type: 2}
+      expected: 1
+    - filter: {fileID: 11400000, guid: eb28092fc0f300a41925e35aced4d21e, type: 2}
+      expected: 0
+  - color: {fileID: 11400000, guid: 4633df429decc02429d832fc75ad119e, type: 2}
+    colors:
+    - color: {fileID: 11400000, guid: 6f27f82b6ce8ba34fad6c5137204b428, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: c9928fd0a283c7e4696990f61db03ffe, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: fd4e4524eb2adf645921d26ccd4b23bf, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 0222e4b3827b0e34fb9dce9998206946, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 4633df429decc02429d832fc75ad119e, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: c1c3179928e3ca1469dc7def60f74379, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 7883bd56d8f28584db93634c226dd32e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 6915091a7a19c1041b83c2a7610fe409, type: 2}
+      expected: 0
+    filters:
+    - filter: {fileID: 11400000, guid: 0b587185685e1e94c983ecd7ae153ef9, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: bb249eb7d0dd93544b7800ca3169a921, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: 8c91956eabd69bf41929c64c884e3b09, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: eb28092fc0f300a41925e35aced4d21e, type: 2}
+      expected: 1
+  - color: {fileID: 11400000, guid: c1c3179928e3ca1469dc7def60f74379, type: 2}
+    colors:
+    - color: {fileID: 11400000, guid: 6f27f82b6ce8ba34fad6c5137204b428, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: c9928fd0a283c7e4696990f61db03ffe, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: fd4e4524eb2adf645921d26ccd4b23bf, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 0222e4b3827b0e34fb9dce9998206946, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 4633df429decc02429d832fc75ad119e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: c1c3179928e3ca1469dc7def60f74379, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 7883bd56d8f28584db93634c226dd32e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 6915091a7a19c1041b83c2a7610fe409, type: 2}
+      expected: 0
+    filters:
+    - filter: {fileID: 11400000, guid: 0b587185685e1e94c983ecd7ae153ef9, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: bb249eb7d0dd93544b7800ca3169a921, type: 2}
+      expected: 1
+    - filter: {fileID: 11400000, guid: 8c91956eabd69bf41929c64c884e3b09, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: eb28092fc0f300a41925e35aced4d21e, type: 2}
+      expected: 1
+  - color: {fileID: 11400000, guid: 7883bd56d8f28584db93634c226dd32e, type: 2}
+    colors:
+    - color: {fileID: 11400000, guid: 6f27f82b6ce8ba34fad6c5137204b428, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: c9928fd0a283c7e4696990f61db03ffe, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: fd4e4524eb2adf645921d26ccd4b23bf, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 0222e4b3827b0e34fb9dce9998206946, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 4633df429decc02429d832fc75ad119e, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: c1c3179928e3ca1469dc7def60f74379, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 7883bd56d8f28584db93634c226dd32e, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 6915091a7a19c1041b83c2a7610fe409, type: 2}
+      expected: 1
+    filters:
+    - filter: {fileID: 11400000, guid: 0b587185685e1e94c983ecd7ae153ef9, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: bb249eb7d0dd93544b7800ca3169a921, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: 8c91956eabd69bf41929c64c884e3b09, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: eb28092fc0f300a41925e35aced4d21e, type: 2}
+      expected: 1
+  - color: {fileID: 11400000, guid: 6915091a7a19c1041b83c2a7610fe409, type: 2}
+    colors:
+    - color: {fileID: 11400000, guid: 6f27f82b6ce8ba34fad6c5137204b428, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: c9928fd0a283c7e4696990f61db03ffe, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: fd4e4524eb2adf645921d26ccd4b23bf, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 0222e4b3827b0e34fb9dce9998206946, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 4633df429decc02429d832fc75ad119e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: c1c3179928e3ca1469dc7def60f74379, type: 2}
+      expected: 1
+    - color: {fileID: 11400000, guid: 7883bd56d8f28584db93634c226dd32e, type: 2}
+      expected: 0
+    - color: {fileID: 11400000, guid: 6915091a7a19c1041b83c2a7610fe409, type: 2}
+      expected: 1
+    filters:
+    - filter: {fileID: 11400000, guid: 0b587185685e1e94c983ecd7ae153ef9, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: bb249eb7d0dd93544b7800ca3169a921, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: 8c91956eabd69bf41929c64c884e3b09, type: 2}
+      expected: 0
+    - filter: {fileID: 11400000, guid: eb28092fc0f300a41925e35aced4d21e, type: 2}
+      expected: 1
