@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable enable
 
-namespace Classification
+namespace drasmart.Classification
 {
     [Serializable]
     public class TypeFilterAsset<TAsset, TFilterAsset> : Classifiable.TypeFilter

@@ -4,7 +4,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace Classification
+namespace drasmart.Classification
 {
     public class Classifiable : MonoBehaviour
     {

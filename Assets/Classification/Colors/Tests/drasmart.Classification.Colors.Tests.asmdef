@@ -1,11 +1,11 @@
 {
-    "name": "Tests",
+    "name": "drasmart.Classification.Colors.Tests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Classification.Colors",
-        "Classification"
+        "drasmart.Classification",
+        "drasmart.Classification.Colors"
     ],
     "includePlatforms": [
         "Editor"

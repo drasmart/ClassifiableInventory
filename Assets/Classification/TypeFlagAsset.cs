@@ -2,7 +2,7 @@
 
 #nullable enable
 
-namespace Classification
+namespace drasmart.Classification
 {
     [CreateAssetMenu(menuName = "Classification/Type Flag")]
     public class TypeFlagAsset : Classifiable.TypeAsset

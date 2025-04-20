@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
-using Classification;
 
 #nullable enable
 
-[CreateAssetMenu(menuName = "Classification/Color Type")]
-public class ColorTypeAsset : TypeAsset<ColorTypeAsset>
+namespace drasmart.Classification.Colors
 {
-    public Color color = Color.black;
+    [CreateAssetMenu(menuName = "Classification/Color Type")]
+    public class ColorTypeAsset : TypeAsset<ColorTypeAsset>
+    {
+        public Color color = Color.black;
+    }
 }

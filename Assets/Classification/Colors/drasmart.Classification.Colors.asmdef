@@ -1,6 +1,6 @@
 {
-    "name": "Classification.Colors",
-    "rootNamespace": "",
+    "name": "drasmart.Classification.Colors",
+    "rootNamespace": "drasmart.Classification.Colors",
     "references": [
         "GUID:663f63cf91f89d14fa3afe559a430c90"
     ],

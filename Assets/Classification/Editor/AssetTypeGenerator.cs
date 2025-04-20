@@ -4,9 +4,9 @@ using System.IO;
 
 #nullable enable
 
-namespace Classification
+namespace drasmart.Classification.Editor
 {
-    public class AssetTypeGenerator : Editor
+    public class AssetTypeGenerator : UnityEditor.Editor
     {
         private static string TemplatesPath => Application.dataPath + "/Classification/Editor/";
 

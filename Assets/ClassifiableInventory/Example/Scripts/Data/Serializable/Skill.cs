@@ -1,10 +1,10 @@
 ﻿using System;
-using Classification;
+using drasmart.Classification;
 using UnityEngine;
 
 #nullable enable
 
-[System.Serializable]
+[Serializable]
 public class Skill : IDraggableModel
 {
     public SkillType? skillType;
